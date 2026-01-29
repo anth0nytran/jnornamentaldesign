@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="JN Ornamental Design - Houston's trusted source for custom wrought iron fences, gates, railings, and ornamental metalwork. 20+ years experience. BBB Accredited. Free estimates." />
+    <title>JN Ornamental Design | Custom Iron Fencing & Gates | Houston TX</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%231e3a5f' width='100' height='100' rx='20'/%3E%3Ctext x='50' y='68' font-family='system-ui' font-size='50' font-weight='900' fill='%23f59e0b' text-anchor='middle'%3EJN%3C/text%3E%3C/svg%3E" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              navy: {
+                50: '#f0f4f8',
+                100: '#d9e2ec',
+                200: '#bcccdc',
+                300: '#9fb3c8',
+                400: '#829ab1',
+                500: '#627d98',
+                600: '#486581',
+                700: '#334e68',
+                800: '#243b53',
+                900: '#1e3a5f',
+                950: '#102a43',
+              },
+              amber: {
+                50: '#fffbeb',
+                100: '#fef3c7',
+                200: '#fde68a',
+                300: '#fcd34d',
+                400: '#fbbf24',
+                500: '#f59e0b',
+                600: '#d97706',
+                700: '#b45309',
+                800: '#92400e',
+                900: '#78350f',
+              },
+            },
+            fontFamily: {
+              display: ['Outfit', 'system-ui', 'sans-serif'],
+              body: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.6s ease-out forwards',
+              'slide-up': 'slideUp 0.6s ease-out forwards',
+              'scale-in': 'scaleIn 0.4s ease-out forwards',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              scaleIn: {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+            },
+          },
+        },
+      }
+    </script>
+
+    <style>
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f0f4f8;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #627d98;
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #486581;
+      }
+
+      /* Selection color */
+      ::selection {
+        background: #fbbf24;
+        color: #102a43;
+      }
+
+      /* Focus visible */
+      :focus-visible {
+        outline: 2px solid #f59e0b;
+        outline-offset: 2px;
+      }
+
+      /* Loading animation for images */
+      img {
+        transition: opacity 0.3s ease;
+      }
+
+      /* Line clamp utility */
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* Gradient text */
+      .text-gradient {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Glass panel effect */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      /* No scrollbar for horizontal scroll areas */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "react-router-dom": "https://esm.sh/react-router-dom@7"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="/index.css">
+  </head>
+  <body class="bg-white">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
