@@ -1,95 +1,52 @@
-/* Base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-body {
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  body {
+    @apply font-body text-navy-900 bg-white antialiased;
+  }
 
-/* Ensure images don't overflow */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Remove default button styles */
-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-/* Remove default list styles */
-ul, ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Remove default anchor styles */
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* Form elements */
-input, textarea, select {
-  font-family: inherit;
-  font-size: inherit;
-}
-
-/* Prevent iOS zoom on input focus */
-@media screen and (max-width: 768px) {
-  input, select, textarea {
-    font-size: 16px !important;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
   }
 }
 
-/* Scrolling animation for review banner */
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
+@layer components {
+  .glass-panel {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
   }
-  100% {
-    transform: translateX(-50%);
+
+  .glass-panel-dark {
+    @apply bg-navy-950/40 backdrop-blur-md border border-white/10;
+  }
+
+  .btn-primary {
+    @apply bg-amber-500 text-navy-950 font-bold px-6 py-3 rounded hover:bg-amber-400 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0;
   }
 }
 
-.animate-scroll {
-  animation: scroll 30s linear infinite;
-}
-
-.animate-scroll:hover {
+/* Animations */
+.pause-animation:hover {
   animation-play-state: paused;
 }
 
-/* Line clamp utility */
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+/* Scrollbar Hide Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-/* Custom Background Patterns */
-.bg-grid-pattern {
-  background-color: #ffffff;
-  background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-.bg-grid-slate {
-  background-color: #f8fafc;
-  background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-  background-size: 32px 32px;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

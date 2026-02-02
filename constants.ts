@@ -1,4 +1,9 @@
 import { BusinessInfo, Review, ServiceCategory, GalleryImage } from './types';
+import serviceAccess from './assets/service-access.png';
+import serviceFence from './assets/service-fence.png';
+import serviceGate from './assets/service-gate.png';
+import serviceRailing from './assets/service-railing.png';
+import fencesHeroBlack from './assets/fences-hero-clean-pro.png';
 
 export const BUSINESS_INFO: BusinessInfo = {
   name: 'JN Ornamental Design LLC',
@@ -27,7 +32,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: 'Access Control',
     slug: 'access-control',
     description: 'Secure your property with professional gate automation and access control systems. From keypads to smartphone-controlled entry, we install and maintain complete access solutions.',
-    heroImage: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
+    heroImage: serviceAccess,
     services: [
       {
         title: 'Gate Automation',
@@ -65,7 +70,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: 'Fences',
     slug: 'fences',
     description: 'From elegant wrought iron to practical chain link, we build fences that stand the test of time. Every fence is custom-fitted to your property with precision craftsmanship.',
-    heroImage: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=1920',
+    heroImage: fencesHeroBlack,
     services: [
       {
         title: 'Wrought Iron Fencing',
@@ -103,7 +108,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: 'Gates',
     slug: 'gates',
     description: 'Make a statement with a custom-designed gate. Whether you need a grand driveway entrance or a simple side gate, we create gates that combine beauty with security.',
-    heroImage: 'https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?w=1920',
+    heroImage: serviceGate,
     services: [
       {
         title: 'Driveway Gates',
@@ -141,7 +146,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: 'Railings',
     slug: 'railings',
     description: 'Safety meets artistry in our custom railing designs. From spiral staircases to balcony rails, we craft metalwork that elevates your space.',
-    heroImage: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1920',
+    heroImage: serviceRailing,
     services: [
       {
         title: 'Stair Railings',

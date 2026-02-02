@@ -1,149 +1,229 @@
 import React from 'react';
-import { SERVICE_CATEGORIES, BUSINESS_INFO } from '../constants';
+import { motion } from 'framer-motion';
+import { SERVICE_CATEGORIES, REVIEWS } from '../constants';
 import ContactForm from '../components/ContactForm';
 import {
     CheckCircleIcon,
-    PhoneIcon,
     ServiceIcons,
     StarIcon,
-    ArrowRightIcon
+    ArrowRightIcon,
+    GoogleIcon,
+    ShieldCheckIcon,
+    ClockIcon
 } from '../components/Icons';
+import railingsHero from '../assets/service-railing.png';
+import fencesFooterLuxury from '../assets/fences-footer-luxury.png';
+
+// Distinct assets for standard services
+import serviceSteps from '../assets/steps.png'; // Stair Railing
+import serviceBalcony from '../assets/fence-aluminum-modern-pro.png'; // Balcony (Modern/Clean)
+import serviceSpiral from '../assets/service-railing.png'; // Spiral
+import serviceHandrail from '../assets/fence-iron-estate-pro.png'; // Handrails (Ornate/Detail)
 
 const Railings: React.FC = () => {
     const category = SERVICE_CATEGORIES.find(c => c.slug === 'railings');
 
     if (!category) return null;
 
+    // Filter reviews relevant to railings
+    const railingReviews = REVIEWS.filter(r =>
+        r.text.toLowerCase().includes('stair') ||
+        r.project?.toLowerCase().includes('railing') ||
+        (r.text.toLowerCase().includes('quality') && r.stars === 5)
+    ).slice(0, 3);
+
     return (
-        <div className="bg-white">
-            {/* Hero Section - Split Layout (No Form) */}
-            <section className="relative flex flex-col lg:flex-row min-h-[60vh]">
-                {/* Left Column: Text */}
-                <div className="lg:w-1/2 bg-navy-950 flex items-center p-12 lg:p-24 relative overflow-hidden">
-                    {/* Background Pattern */}
-                    <div className="absolute inset-0 bg-grid-white/[0.05] pointer-events-none"></div>
+        <div className="bg-white font-sans selection:bg-amber-100 selection:text-navy-900 overflow-x-hidden">
 
-                    <div className="relative z-10 max-w-xl">
-                        <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8">
-                            <span className="flex gap-1 text-amber-500">
-                                <StarIcon className="w-3.5 h-3.5" filled />
-                                <StarIcon className="w-3.5 h-3.5" filled />
-                                <StarIcon className="w-3.5 h-3.5" filled />
-                                <StarIcon className="w-3.5 h-3.5" filled />
-                                <StarIcon className="w-3.5 h-3.5" filled />
-                            </span>
-                            <span className="text-sm font-medium text-white/90 tracking-wide border-l border-white/20 pl-2 ml-1">
-                                Top Rated Ironwork
-                            </span>
-                        </div>
-
-                        <h1 className="font-display text-5xl lg:text-7xl font-bold text-white leading-none mb-6">
-                            Custom <br />
-                            <span className="text-amber-500">Railings</span>
-                        </h1>
-
-                        <p className="text-lg text-slate-300 leading-relaxed mb-10 font-light">
-                            Safety meets artistry. We fabricate interior and exterior railings that comply with building codes and elevate your design.
-                        </p>
-
-                        <div className="flex flex-wrap gap-4">
-                            <a href="#contact" className="bg-amber-500 hover:bg-amber-400 text-navy-950 px-8 py-4 font-bold rounded-lg transition-colors flex items-center gap-2">
-                                Get A Quote <ArrowRightIcon className="w-5 h-5" />
-                            </a>
-                            <a href="#details" className="border-2 border-slate-700 text-white hover:border-white px-8 py-4 font-bold rounded-lg transition-colors">
-                                View Types
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right Column: Large Hero Image */}
-                <div className="lg:w-1/2 bg-slate-200 relative min-h-[400px]">
+            {/* 1. HERO SECTION (High Conversion Split Layout) */}
+            <section className="relative min-h-[90vh] flex items-center bg-black overflow-hidden">
+                {/* Background Image with Gradient Overlay */}
+                <div className="absolute inset-0 z-0">
                     <img
-                        src={category.heroImage}
-                        alt="Custom Railing Fabrication"
-                        className="absolute inset-0 w-full h-full object-cover"
+                        src={railingsHero}
+                        alt="Custom Handrails and Staircases Houston"
+                        className="w-full h-full object-cover opacity-90"
                     />
-                    <div className="absolute inset-0 bg-navy-950/10"></div>
+                    {/* Gradient to ensure text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent"></div>
                 </div>
-            </section>
 
-            {/* Intro Stats */}
-            <section className="bg-navy-900 border-b border-white/5 text-white py-12">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
-                        <div>
-                            <div className="text-3xl font-display font-bold text-amber-500 mb-1">Code</div>
-                            <div className="text-xs text-slate-400 uppercase tracking-widest">Compliant</div>
-                        </div>
-                        <div>
-                            <div className="text-3xl font-display font-bold text-amber-500 mb-1">Solid</div>
-                            <div className="text-xs text-slate-400 uppercase tracking-widest">Installation</div>
-                        </div>
-                        <div>
-                            <div className="text-3xl font-display font-bold text-amber-500 mb-1">Custom</div>
-                            <div className="text-xs text-slate-400 uppercase tracking-widest">Finish Options</div>
-                        </div>
-                        <div>
-                            <div className="text-3xl font-display font-bold text-amber-500 mb-1">Interior</div>
-                            <div className="text-xs text-slate-400 uppercase tracking-widest">& Exterior</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-24 pb-16">
+                    <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
-            {/* Detailed Services Section */}
-            <section id="details" className="py-24 bg-white">
-                <div className="container mx-auto px-6 max-w-5xl">
-                    <div className="text-center mb-20">
-                        <span className="text-amber-600 font-bold uppercase tracking-widest text-xs mb-3 block">Railing Types</span>
-                        <h2 className="font-display text-4xl font-bold text-navy-950">Safety & Style Options</h2>
-                        <p className="text-slate-500 mt-4 max-w-2xl mx-auto">
-                            We specialize in all types of metal railing fabrication, from modern horizontal bars to traditional ornamental scrolls.
-                        </p>
-                    </div>
-
-                    <div className="space-y-20">
-                        {category.services.map((service, idx) => {
-                            const Icon = ServiceIcons[service.icon] || ServiceIcons.rail;
-                            const isEven = idx % 2 === 0;
-
-                            return (
-                                <div key={idx} className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-start`}>
-                                    {/* Icon/Visual Side */}
-                                    <div className="md:w-1/3 flex-shrink-0">
-                                        <div className="bg-slate-50 rounded-2xl p-8 border border-slate-100 text-center relative overflow-hidden group hover:border-amber-200 transition-colors">
-                                            <div className="w-20 h-20 bg-white rounded-full mx-auto flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 transition-transform">
-                                                <Icon className="w-10 h-10 text-amber-600" />
+                        {/* Left Column: Copy & Trust Signals */}
+                        <div className="lg:col-span-7 flex flex-col items-start">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6 }}
+                            >
+                                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-1.5 mb-6">
+                                    <div className="flex -space-x-1">
+                                        {[...Array(5)].map((_, i) => (
+                                            <div key={i} className="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center border border-navy-950">
+                                                <StarIcon className="w-2.5 h-2.5 text-navy-950" filled />
                                             </div>
-                                            <h3 className="font-display text-2xl font-bold text-navy-950 mb-2">{service.title}</h3>
-                                            <div className="inline-block px-3 py-1 bg-navy-100 text-navy-800 text-xs font-bold rounded-full uppercase tracking-wide">
-                                                Precision Made
-                                            </div>
+                                        ))}
+                                    </div>
+                                    <span className="text-sm font-semibold text-white tracking-wide ml-2">
+                                        Houston's Custom Metal Experts
+                                    </span>
+                                </div>
+
+                                <h1 className="font-display text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-[1.1] mb-6 drop-shadow-xl">
+                                    Safety. Artistry. <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">
+                                        Perfectly Fitted.
+                                    </span>
+                                </h1>
+
+                                <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl mb-8 font-light">
+                                    From modern balcony rails to intricate spiral staircases, we design and install custom metalwork that elevates your home's safety and style.
+                                </p>
+
+                                {/* Trust Badges */}
+                                <div className="flex flex-wrap gap-4 md:gap-8 border-t border-white/10 pt-8 w-full">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500">
+                                            <ShieldCheckIcon className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <div className="text-white font-bold text-sm">Code Compliant</div>
+                                            <div className="text-white/40 text-xs">Exceeds Safety Standards</div>
                                         </div>
                                     </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500">
+                                            <ClockIcon className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <div className="text-white font-bold text-sm">Precise Fit</div>
+                                            <div className="text-white/40 text-xs">Laser Measured</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
 
-                                    {/* Content Side */}
-                                    <div className="md:w-2/3">
-                                        <h3 className="text-2xl font-bold text-navy-950 mb-4 flex items-center gap-3">
-                                            {service.title} Specs
-                                            <div className="h-px flex-1 bg-slate-200"></div>
+                        {/* Right Column: Embedded Quote Form (The "Hook") */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="lg:col-span-5 w-full"
+                        >
+                            <div className="bg-white rounded-2xl shadow-2xl shadow-black/50 p-6 md:p-8 relative overflow-hidden ring-1 ring-white/10">
+                                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-500 to-amber-300"></div>
+                                <div className="mb-6">
+                                    <h3 className="font-display text-2xl font-bold text-navy-950 mb-2">
+                                        Get a Railing Quote
+                                    </h3>
+                                    <p className="text-slate-500 text-sm">
+                                        Pricing for staircases, balconies, and handrails.
+                                    </p>
+                                </div>
+                                <ContactForm variant="hero" />
+                                <div className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-400 bg-slate-50 py-2 rounded-lg">
+                                    <CheckCircleIcon className="w-3 h-3 text-green-500" />
+                                    No obligation • Local Houston Team
+                                </div>
+                            </div>
+                        </motion.div>
+
+                    </div>
+                </div>
+            </section>
+
+            {/* 2. VALUE PROPOSITION GRID (The "Logic") */}
+            <section className="py-20 bg-slate-50 border-b border-slate-200">
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <span className="text-amber-600 font-bold uppercase tracking-widest text-xs mb-3 block">Why Choose JN Ornamental?</span>
+                        <h2 className="font-display text-3xl md:text-4xl font-bold text-navy-950 mb-4">Precision You Can Trust</h2>
+                        <p className="text-slate-600 text-lg">
+                            Railings aren't just decorative; they are safety devices. We fabricate to strict tolerances to ensure zero wobble and maximum load bearing.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {[
+                            {
+                                icon: ShieldCheckIcon,
+                                title: "Structural Integrity",
+                                desc: "Our welds are clean, deep, and inspected. We anchor into concrete or wood blocking with industrial-grade fasteners."
+                            },
+                            {
+                                icon: ArrowRightIcon,
+                                title: "Complex Geometries",
+                                desc: "Spiral stairs? Radius balconies? We can fabricate curved rails that follow the exact contour of your architecture."
+                            },
+                            {
+                                icon: StarIcon,
+                                title: "Premium Finishes",
+                                desc: "From satin black powder coat to custom bronze finishes, we ensure your railing looks furniture-grade."
+                            }
+                        ].map((item, idx) => (
+                            <div key={idx} className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100 hover:border-amber-500/30 transition-colors group">
+                                <div className="w-14 h-14 bg-navy-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-amber-500 group-hover:text-white transition-colors text-navy-900">
+                                    <item.icon className="w-7 h-7" />
+                                </div>
+                                <h3 className="font-display text-xl font-bold text-navy-950 mb-3">{item.title}</h3>
+                                <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 3. SERVICE DETAILS (The "Meat") - Consolidated Grid Layout */}
+            <section id="services" className="bg-white py-20">
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <h2 className="font-display text-3xl md:text-4xl font-bold text-navy-950 mb-4">Fabrication Services</h2>
+                        <p className="text-slate-600">Custom metalwork for every part of your property.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {category.services.map((service, idx) => {
+                            // Assign distinct existing assets
+                            let ServiceImage = serviceSteps;
+
+                            if (service.title.includes('Stair')) ServiceImage = serviceSteps;
+                            else if (service.title.includes('Balcony')) ServiceImage = serviceBalcony;
+                            else if (service.title.includes('Spiral')) ServiceImage = serviceSpiral;
+                            else if (service.title.includes('Handrail')) ServiceImage = serviceHandrail;
+
+                            return (
+                                <div key={idx} className="bg-white rounded-2xl border border-slate-100 shadow-xl overflow-hidden hover:shadow-2xl transition-shadow group flex flex-col h-full">
+                                    {/* Image Section */}
+                                    <div className="relative h-64 overflow-hidden">
+                                        <div className="absolute inset-0 bg-slate-200 animate-pulse"></div>
+                                        <img
+                                            src={ServiceImage}
+                                            alt={service.title}
+                                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+                                        <h3 className="absolute bottom-4 left-6 text-white font-display text-2xl font-bold tracking-wide drop-shadow-md">
+                                            {service.title}
                                         </h3>
+                                    </div>
 
-                                        <p className="text-lg text-slate-600 leading-relaxed mb-8">
-                                            {service.description} We ensure proper anchoring to your specific substrate (wood, concrete, or stone) for maximum rigidity and safety.
+                                    {/* Content Section */}
+                                    <div className="p-8 flex flex-col flex-grow">
+                                        <p className="text-slate-600 mb-6 flex-grow leading-relaxed">
+                                            {service.description}
                                         </p>
 
-                                        <div className="bg-slate-50 p-6 rounded-xl border-l-4 border-amber-500">
-                                            <h4 className="font-bold text-navy-900 mb-4 text-sm uppercase tracking-wide">Design & Safety Features</h4>
-                                            <div className="grid sm:grid-cols-2 gap-4">
-                                                {service.features?.map((f, i) => (
-                                                    <div key={i} className="flex items-start gap-2">
-                                                        <CheckCircleIcon className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                                                        <span className="text-slate-700 text-sm font-medium">{f}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                        <div className="space-y-3">
+                                            <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Key Features</p>
+                                            {service.features?.map((f, i) => (
+                                                <li key={i} className="flex items-start gap-3 list-none">
+                                                    <CheckCircleIcon className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                                                    <span className="text-sm font-medium text-navy-800">{f}</span>
+                                                </li>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
@@ -153,24 +233,33 @@ const Railings: React.FC = () => {
                 </div>
             </section>
 
-            {/* Large Gallery Grid */}
-            <section className="py-24 bg-slate-50">
-                <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="mb-12">
-                        <h2 className="font-display text-4xl font-bold text-navy-950 mb-4">Railing Gallery</h2>
-                        <p className="text-slate-500">Examples of our interior and exterior handrail projects.</p>
+            {/* 4. REVIEWS (The "Social Proof") */}
+            <section className="py-24 bg-navy-50 relative overflow-hidden">
+                <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                    <div className="text-center mb-16">
+                        <h2 className="font-display text-3xl md:text-4xl font-bold text-navy-950 mb-4">Built to Perfection</h2>
+                        <div className="flex items-center justify-center gap-2 text-amber-500 mb-4">
+                            {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-5 h-5" filled />)}
+                        </div>
+                        <p className="text-slate-600">Houston's top choice for custom metalwork.</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                        {category.gallery.map((img, idx) => (
-                            <div key={idx} className="group relative aspect-[16/10] overflow-hidden rounded-xl shadow-lg bg-navy-900">
-                                <img
-                                    src={img}
-                                    alt={`Railing ${idx}`}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span className="text-white font-bold text-lg">View Details</span>
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {railingReviews.map((review, idx) => (
+                            <div key={idx} className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
+                                <div className="flex gap-1 text-amber-500 mb-4">
+                                    {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-4 h-4" filled />)}
+                                </div>
+                                <p className="text-slate-700 italic mb-6 leading-relaxed">"{review.text}"</p>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-navy-100 rounded-full flex items-center justify-center font-bold text-navy-700">
+                                        {review.name.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-navy-900 text-sm">{review.name}</div>
+                                        <div className="text-xs text-slate-400">Verified Client</div>
+                                    </div>
+                                    <GoogleIcon className="w-5 h-5 ml-auto opacity-50 grayscale" />
                                 </div>
                             </div>
                         ))}
@@ -178,26 +267,46 @@ const Railings: React.FC = () => {
                 </div>
             </section>
 
-            {/* Bottom Contact Form */}
-            <section id="contact" className="py-24 bg-white">
+            {/* 5. SEO / FAQ BLOCK (The "Authority") */}
+            <section className="py-20 bg-white border-t border-slate-100">
                 <div className="container mx-auto px-6 max-w-4xl">
-                    <div className="bg-navy-950 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
-                        {/* Background Pattern */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                    <h2 className="font-display text-3xl font-bold text-navy-950 mb-10 text-center">Railing & Stair FAQ</h2>
 
-                        <div className="relative z-10 text-center mb-12">
-                            <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-6">Start Your Project</h2>
-                            <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-                                Upload your sketches or photos for a quote, or schedule an on-site consultation.
-                            </p>
+                    <div className="space-y-6">
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                            <h3 className="font-bold text-navy-900 text-lg mb-2">Is the railing code compliant?</h3>
+                            <p className="text-slate-600">Yes. We are experts in Houston and Texas building codes. We ensure all baluster spacing (4-inch sphere rule) and handrail heights meet current safety regulations for inspection and Certificate of Occupancy.</p>
                         </div>
-
-                        <div className="bg-white rounded-2xl p-6 md:p-8">
-                            <ContactForm />
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                            <h3 className="font-bold text-navy-900 text-lg mb-2">Can you replace wood rails with iron?</h3>
+                            <p className="text-slate-600">Absolutely. Replacing dated wood balusters with modern iron spindles is one of our most popular interior upgrades. It modernizes the home instantly and is often completed in just 1-2 days.</p>
+                        </div>
+                        <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                            <h3 className="font-bold text-navy-900 text-lg mb-2">How do you mount exterior rails?</h3>
+                            <p className="text-slate-600">For concrete steps or patios, we core drill and set posts in epoxy or rocknite for maximum strength (no loose surface plates). For wood decks, we block and bolt through the detailed framing.</p>
                         </div>
                     </div>
                 </div>
             </section>
+
+            {/* 6. FINAL CTA (The "Close") */}
+            <section className="py-24 relative overflow-hidden">
+                <div className="absolute inset-0">
+                    <img src={fencesFooterLuxury} alt="Luxury Estate Staircase" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+                </div>
+                <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                    <div className="text-center mb-12">
+                        <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">Elevate Your Space</h2>
+                        <p className="text-xl text-slate-300 max-w-2xl mx-auto">Get a firm price quote for custom railings or staircases. Safety, style, and professional installation.</p>
+                    </div>
+
+                    <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-2xl p-6 md:p-8">
+                        <ContactForm variant="hero" />
+                    </div>
+                </div>
+            </section>
+
         </div>
     );
 };
