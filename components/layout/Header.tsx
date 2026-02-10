@@ -25,6 +25,7 @@ const Header: React.FC = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     ...SERVICE_CATEGORIES.map(cat => ({ name: cat.title, path: `/${cat.slug}` })),
+    { name: 'Gallery', path: '/gallery' },
     { name: 'Contact', path: '/contact' },
   ];
 
@@ -32,43 +33,46 @@ const Header: React.FC = () => {
 
   return (
     <>
-      {/* Top Bar - Hidden on scroll for cleaner look, or kept small? Let's keep it but make it sleek */}
-      <div className={`bg-navy-950 text-white py-2 text-sm transition-all duration-300 ${isScrolled ? 'h-0 py-0 overflow-hidden opacity-0' : 'h-auto opacity-100'}`}>
+      {/* ── ANNOUNCEMENT BAR ── */}
+      <div className={`bg-navy-900 text-white transition-all duration-300 ${isScrolled ? 'h-0 py-0 overflow-hidden opacity-0' : 'py-2.5 opacity-100'}`}>
         <div className="container mx-auto px-4 max-w-7xl flex justify-between items-center">
-          <div className="flex items-center gap-4 text-white/70">
+          {/* Left: Trust signals */}
+          <div className="flex items-center gap-5 text-sm">
             <div className="flex items-center gap-2">
-              <GoogleIcon className="w-4 h-4" />
+              <GoogleIcon className="w-4 h-4 text-white/60" />
               <div className="flex text-amber-400">
                 {[...Array(5)].map((_, i) => (
                   <span key={i}><StarIcon className="w-3 h-3" filled /></span>
                 ))}
               </div>
-              <span className="font-semibold text-white">{BUSINESS_INFO.rating}</span>
+              <span className="font-bold text-white">{BUSINESS_INFO.rating}</span>
             </div>
-            <span className="hidden md:inline text-white/30">|</span>
-            <span className="hidden md:inline">BBB Accredited</span>
-            <span className="hidden lg:inline text-white/30">|</span>
-            <span className="hidden lg:inline">{'Hablamos Espa\u00f1ol'}</span>
+            <span className="hidden md:inline text-navy-400">|</span>
+            <span className="hidden md:inline text-navy-200 text-xs font-semibold tracking-wide">BBB Accredited</span>
+            <span className="hidden lg:inline text-navy-400">|</span>
+            <span className="hidden lg:inline text-navy-200 text-xs font-semibold tracking-wide">{'Hablamos Espa\u00f1ol'}</span>
           </div>
+          {/* Right: Phone */}
           <a
             href={`tel:${BUSINESS_INFO.phone}`}
-            className="flex items-center gap-2 font-bold hover:text-amber-500 transition-colors"
+            className="flex items-center gap-2 text-sm font-bold text-white hover:text-amber-400 transition-colors"
           >
             <PhoneIcon className="w-4 h-4" />
-            {BUSINESS_INFO.phone}
+            <span className="hidden sm:inline">{BUSINESS_INFO.phone}</span>
           </a>
         </div>
       </div>
 
-      {/* Main Navigation */}
+      {/* ── MAIN NAVIGATION ── */}
       <nav
-        className={`sticky top-0 z-50 transition-all duration-300 border-b ${isScrolled
-            ? 'bg-white/90 backdrop-blur-md shadow-md border-gray-200 py-2'
-            : 'bg-white border-transparent py-4'
-          }`}
+        className={`sticky top-0 z-50 transition-all duration-300 border-t-4 border-amber-500 ${isScrolled
+          ? 'bg-white shadow-lg shadow-navy-900/5 py-2'
+          : 'bg-white py-3'
+          } border-b border-navy-100`}
       >
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex justify-between items-center">
+
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
               <img
@@ -77,26 +81,31 @@ const Header: React.FC = () => {
                 className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
               <div className="leading-tight hidden sm:block">
-                <div className="font-display font-bold text-lg text-navy-950 tracking-tight">
+                <div className="font-display font-bold text-lg text-navy-900 tracking-tight">
                   JN ORNAMENTAL DESIGN
                 </div>
-                <div className="text-[10px] text-navy-500 font-semibold uppercase tracking-widest">
+                <div className="text-[10px] text-navy-400 font-semibold uppercase tracking-[0.2em]">
                   {BUSINESS_INFO.tagline}
                 </div>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+            {/* Desktop Links */}
+            <div className="hidden lg:flex items-center gap-0.5">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative px-4 py-2 text-sm font-semibold transition-colors group ${isActive(link.path) ? 'text-amber-600' : 'text-navy-700 hover:text-amber-600'
+                  className={`relative px-4 py-2 text-sm font-bold transition-colors group
+                    ${isActive(link.path)
+                      ? 'text-navy-900'
+                      : 'text-navy-600 hover:text-navy-900'
                     }`}
                 >
                   {link.name}
-                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-amber-500 transform origin-left transition-transform duration-300 ${isActive(link.path) ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
+                  {/* Active indicator — Amber underline */}
+                  <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-amber-500 transition-all duration-300
+                    ${isActive(link.path) ? 'w-5' : 'w-0 group-hover:w-5'}`}></span>
                 </Link>
               ))}
             </div>
@@ -104,17 +113,17 @@ const Header: React.FC = () => {
             {/* CTA Button */}
             <div className="hidden lg:block">
               <Link
-                to="/contact"
-                className="relative overflow-hidden bg-amber-500 text-navy-950 px-6 py-2.5 font-bold text-sm rounded transition-all hover:bg-amber-400 hover:shadow-lg hover:-translate-y-0.5"
+                to="/contact#quote"
+                className="bg-amber-500 text-navy-950 px-6 py-2.5 font-bold text-sm rounded transition-all hover:bg-amber-400 hover:shadow-lg hover:shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0"
               >
                 Get Free Quote
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-navy-700 hover:bg-gray-100 rounded-md transition-colors"
+              className="lg:hidden p-2 text-navy-700 hover:bg-navy-50 rounded-md transition-colors"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
@@ -126,7 +135,7 @@ const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* ── MOBILE MENU ── */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -134,24 +143,33 @@ const Header: React.FC = () => {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="lg:hidden bg-white border-t border-gray-100 overflow-hidden"
+              className="lg:hidden bg-white border-t border-navy-100 overflow-hidden"
             >
-              <div className="container mx-auto px-4 py-4 space-y-2">
+              <div className="container mx-auto px-4 py-4 space-y-1">
                 {navLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}
-                    className={`block px-4 py-3 font-semibold rounded-lg transition-colors ${isActive(link.path)
-                        ? 'bg-amber-50 text-amber-700'
-                        : 'text-navy-700 hover:bg-gray-50'
+                    className={`block px-4 py-3 font-semibold rounded-lg transition-colors
+                      ${isActive(link.path)
+                        ? 'bg-amber-50 text-navy-900 border-l-4 border-amber-500'
+                        : 'text-navy-600 hover:bg-navy-50 hover:text-navy-900'
                       }`}
                   >
                     {link.name}
                   </Link>
                 ))}
+                {/* Mobile phone link */}
+                <a
+                  href={`tel:${BUSINESS_INFO.phone}`}
+                  className="flex items-center gap-3 px-4 py-3 text-navy-600 font-semibold hover:bg-navy-50 rounded-lg transition-colors"
+                >
+                  <PhoneIcon className="w-5 h-5 text-amber-500" />
+                  {BUSINESS_INFO.phone}
+                </a>
                 <Link
                   to="/contact"
-                  className="block mt-4 bg-amber-500 text-navy-950 px-4 py-3 font-bold text-center rounded-lg shadow-md active:scale-95 transition-transform"
+                  className="block mt-3 bg-amber-500 text-navy-950 px-4 py-3 font-bold text-center rounded-lg shadow-md active:scale-[0.98] transition-transform"
                 >
                   Get Free Quote
                 </Link>

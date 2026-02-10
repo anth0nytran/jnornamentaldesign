@@ -14,7 +14,7 @@ export const BUSINESS_INFO: BusinessInfo = {
   address: '410 Northville St, Unit A, Houston, TX',
   website: 'jnornamentaldesign.com',
   languages: ['English', 'Spanish'],
-  yearsExperience: '20+',
+  yearsExperience: '10+',
   rating: 4.9,
   reviewCount: 47,
   serviceAreas: ['Houston, TX', 'Katy', 'Sugar Land', 'The Woodlands', 'Cypress', 'Pearland'],
@@ -28,44 +28,6 @@ export const BUSINESS_INFO: BusinessInfo = {
 };
 
 export const SERVICE_CATEGORIES: ServiceCategory[] = [
-  {
-    title: 'Access Control',
-    slug: 'access-control',
-    description: 'Secure your property with professional gate automation and access control systems. From keypads to smartphone-controlled entry, we install and maintain complete access solutions.',
-    heroImage: serviceAccess,
-    services: [
-      {
-        title: 'Gate Automation',
-        description: 'Electric gate openers for swing and slide gates with remote control access.',
-        icon: 'gear',
-        features: ['Swing gate operators', 'Slide gate operators', 'Remote controls', 'Battery backup']
-      },
-      {
-        title: 'Keypad Entry Systems',
-        description: 'Secure numeric keypad access for residential and commercial properties.',
-        icon: 'keypad',
-        features: ['Programmable codes', 'Weather resistant', 'Night illumination']
-      },
-      {
-        title: 'Intercom Systems',
-        description: 'Video and audio intercom systems for visitor screening.',
-        icon: 'intercom',
-        features: ['Video monitoring', 'Two-way audio', 'Smartphone integration']
-      },
-      {
-        title: 'Card & Fob Access',
-        description: 'Commercial-grade card readers and key fob systems.',
-        icon: 'card',
-        features: ['Proximity cards', 'Key fobs', 'Access logging']
-      }
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600',
-      'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600',
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600'
-    ]
-  },
   {
     title: 'Fences',
     slug: 'fences',
@@ -179,6 +141,32 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
       'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600',
       'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600'
     ]
+  },
+  {
+    title: 'Access Control',
+    slug: 'access-control',
+    description: 'Secure your property with professional gate automation and access control systems. From keypads to smartphone-controlled entry, we install and maintain complete access solutions.',
+    heroImage: serviceAccess,
+    services: [
+      {
+        title: 'Gate Automation',
+        description: 'Electric gate openers for swing and slide gates with remote control access.',
+        icon: 'gear',
+        features: ['Swing gate operators', 'Slide gate operators', 'Remote controls', 'Battery backup']
+      },
+      {
+        title: 'Keypad Entry Systems',
+        description: 'Secure numeric keypad access for residential and commercial properties.',
+        icon: 'keypad',
+        features: ['Programmable codes', 'Weather resistant', 'Night illumination']
+      }
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600',
+      'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600',
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600'
+    ]
   }
 ];
 
@@ -245,7 +233,7 @@ export const FEATURED_PROJECTS: GalleryImage[] = [
 ];
 
 export const STATS = [
-  { value: '20+', label: 'Years Experience' },
+  { value: '10+', label: 'Years Experience' },
   { value: '1,500+', label: 'Projects Completed' },
   { value: '4.9', label: 'Star Rating' },
   { value: '100%', label: 'Satisfaction' },
