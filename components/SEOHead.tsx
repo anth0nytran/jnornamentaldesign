@@ -17,7 +17,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     title,
     description,
     canonical,
-    ogImage = 'https://jnornamentaldesign.com/og-default.png',
+    ogImage = 'https://jnornamentaldesign.com/logo.svg',
     ogType = 'website',
     keywords,
 }) => {
