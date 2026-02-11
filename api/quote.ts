@@ -56,13 +56,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (!resendRes.ok) {
             const errBody = await resendRes.text();
             console.error('Resend API error:', resendRes.status, errBody);
-            return res.status(500).json({ error: 'Failed to send quote request. Please try again later.' });
+            return res.status(500).json({ error: 'Failed to send quote request.', detail: errBody, status: resendRes.status });
         }
 
         return res.status(200).json({ success: true });
-    } catch (err) {
+    } catch (err: any) {
         console.error('Quote submission error:', err);
-        return res.status(500).json({ error: 'An unexpected error occurred.' });
+        return res.status(500).json({ error: 'An unexpected error occurred.', detail: err?.message });
     }
 }
 
