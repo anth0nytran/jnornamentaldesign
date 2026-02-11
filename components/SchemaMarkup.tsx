@@ -142,8 +142,8 @@ const SchemaMarkup: React.FC<SchemaMarkupProps> = ({
         schemas.push(buildFAQSchema(faqs));
     }
 
-    // For Service pages, also append a LocalBusiness reference
-    if (type === 'Service') {
+    // For Service, ContactPage, and ImageGallery pages, also append a LocalBusiness reference
+    if (type === 'Service' || type === 'ContactPage' || type === 'ImageGallery') {
         schemas.push(buildLocalBusinessSchema());
     }
 

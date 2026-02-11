@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { BUSINESS_INFO, SERVICE_CATEGORIES, REVIEWS, FEATURED_PROJECTS } from '../constants';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BUSINESS_INFO, SERVICE_CATEGORIES, FEATURED_PROJECTS } from '../constants';
+import { ALL_REVIEWS } from '../reviewsData';
+import ReviewCarousel from '../components/ReviewCarousel';
 import ContactForm from '../components/ContactForm';
 import heroBackground from '../assets/hero-luxury-gate-v2.png';
+
+// ── Hero slideshow: landscape gallery images ──
+import cedarFence from '../assets/gallery/Cedar Wood fence with 6inch bevel board botton.jpg';
+import doubleDrivewayGate from '../assets/gallery/Double Driveway Gate at south of Houston.jpg';
+import img0348 from '../assets/gallery/IMG_0348.JPG';
+import img0586 from '../assets/gallery/IMG_0586.jpeg';
+import img0805 from '../assets/gallery/IMG_0805.JPG';
+import img1361 from '../assets/gallery/IMG_1361.JPG';
+
+const HERO_SLIDES = [
+  cedarFence,
+  doubleDrivewayGate,
+  img0348,
+  img0586,
+  img0805,
+  img1361,
+];
 import artisanWelder from '../assets/artisan-welder.png';
 import reviewsLuxuryBg from '../assets/reviews-luxury.png';
 import {
@@ -51,6 +70,15 @@ const PROCESS_STEPS = [
 ];
 
 const Home: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="bg-white font-body selection:bg-amber-500 selection:text-black overflow-x-hidden">
       <SEOHead
@@ -65,15 +93,22 @@ const Home: React.FC = () => {
           HERO SECTION — Bold Industrial
       ═══════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[90vh] flex items-center bg-iron-900 overflow-hidden">
-        {/* Background Image */}
+        {/* Slideshow Background */}
         <div className="absolute inset-0 z-0">
-          <img
-            src={heroBackground}
-            alt="Industrial metalwork and custom fencing"
-            className="w-full h-full object-cover opacity-60"
-          />
+          <AnimatePresence mode="popLayout">
+            <motion.img
+              key={currentSlide}
+              src={HERO_SLIDES[currentSlide]}
+              alt="JN Ornamental Design project showcase"
+              className="absolute inset-0 w-full h-full object-cover"
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 0.65, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              transition={{ opacity: { duration: 1.2, ease: 'easeInOut' }, scale: { duration: 6, ease: 'linear' } }}
+            />
+          </AnimatePresence>
           {/* Heavy black gradient for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/25 z-[1]"></div>
         </div>
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-20 pb-12">
@@ -93,7 +128,7 @@ const Home: React.FC = () => {
                   </span>
                 </div>
 
-                <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[0.95] tracking-tight mb-6 uppercase">
+                <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight mb-6 uppercase">
                   Custom Iron Fences, Gates &amp;{' '}
                   <span className="text-amber-500">
                     Railings in Houston
@@ -132,8 +167,8 @@ const Home: React.FC = () => {
                     <div className="text-xs text-gray-400 uppercase tracking-widest font-semibold font-body">BBB Rating</div>
                   </div>
                   <div>
-                    <div className="text-3xl font-display font-bold text-amber-500 mb-1">TOP</div>
-                    <div className="text-xs text-gray-400 uppercase tracking-widest font-semibold font-body">Pro Status</div>
+                    <div className="text-3xl font-display font-bold text-amber-500 mb-1">1,500+</div>
+                    <div className="text-xs text-gray-400 uppercase tracking-widest font-semibold font-body">Projects Done</div>
                   </div>
                 </div>
               </motion.div>
@@ -402,7 +437,7 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {FEATURED_PROJECTS.slice(0, 4).map((project, idx) => (
               <div key={idx} className="group relative overflow-hidden rounded-lg bg-gray-200 shadow-md hover:shadow-2xl transition-all duration-500 aspect-[4/3]">
-                <img src={project.src} alt={project.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src={project.src} alt={project.alt} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300"></div>
                 <div className="absolute bottom-0 left-0 p-8 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                   <span className="text-amber-500 text-xs font-display font-bold uppercase tracking-wider mb-2 block">{project.category}</span>
@@ -421,99 +456,21 @@ const Home: React.FC = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          REVIEWS — Dark industrial, yellow accents
+          REVIEWS — Scrollable carousel with ALL reviews
       ═══════════════════════════════════════════════════════════ */}
-      <section className="py-24 relative overflow-hidden">
-        {/* Background Image with heavy dark overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={reviewsLuxuryBg}
-            alt="Custom iron fence installation"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/90"></div>
-          <div className="absolute inset-0 bg-black/30"></div>
-        </div>
-
-        <div className="container mx-auto px-6 max-w-7xl relative z-10">
-          <div className="flex flex-col md:flex-row items-center justify-between mb-16">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500 text-xs font-display font-bold uppercase tracking-widest text-black">
-                  <CheckCircleIcon className="w-3 h-3" />
-                  Verified Business
-                </div>
-              </div>
-              <h2 className="font-display text-4xl font-bold text-white mb-3 uppercase">Houston Customer Reviews</h2>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1 bg-white/5 backdrop-blur-sm px-4 py-2 border border-white/10">
-                  <div className="flex text-amber-500">
-                    {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-4 h-4" filled />)}
-                  </div>
-                  <span className="font-display font-bold text-white ml-2">5.0</span>
-                </div>
-                <span className="text-gray-400 text-sm font-body normal-case">Based on 40+ Verified Reviews</span>
-              </div>
-            </div>
-
-            <a
-              href="https://www.google.com/maps"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 md:mt-0 group flex items-center gap-3 bg-white text-black px-6 py-3 rounded-md font-display font-bold uppercase tracking-wider text-sm transition-all shadow-lg hover:shadow-amber-500/20 hover:scale-105"
-            >
-              <div className="w-6 h-6 flex items-center justify-center">
-                <GoogleIcon className="w-5 h-5" />
-              </div>
-              Read Google Reviews
-              <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform text-amber-500" />
-            </a>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {REVIEWS.map((review, idx) => (
-              <div key={idx} className="bg-white rounded-lg p-8 shadow-xl relative overflow-hidden transform hover:-translate-y-1 transition-transform duration-300">
-                {/* Thick yellow top bar */}
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-500"></div>
-
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex gap-1 text-amber-500">
-                    {[...Array(review.stars)].map((_, i) => <StarIcon key={i} className="w-4 h-4" filled />)}
-                  </div>
-                  <div className="flex items-center gap-1 text-[10px] font-display font-bold text-gray-500 uppercase tracking-wider bg-gray-100 px-2 py-1">
-                    <CheckCircleIcon className="w-3 h-3 text-gray-400" />
-                    Verified Client
-                  </div>
-                </div>
-
-                <p className="text-gray-700 mb-8 leading-relaxed text-lg font-body normal-case italic">
-                  "{review.text}"
-                </p>
-
-                <div className="flex items-center gap-4 mt-auto">
-                  <div className="w-12 h-12 bg-iron-900 text-amber-500 font-display font-bold flex items-center justify-center text-lg rounded-md">
-                    {review.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-display font-bold text-iron-900">{review.name}</div>
-                    <div className="text-xs text-gray-500 font-body normal-case">Houston, TX</div>
-                  </div>
-                  <div className="ml-auto opacity-30 grayscale">
-                    <GoogleIcon className="w-5 h-5" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ReviewCarousel
+        reviews={ALL_REVIEWS}
+        title="Houston Customer Reviews"
+        subtitle={`${ALL_REVIEWS.length}+ verified reviews from Google, Thumbtack & Yelp`}
+        variant="dark"
+      />
 
       {/* ═══════════════════════════════════════════════════════════
           FINAL CTA — Bold industrial close
       ═══════════════════════════════════════════════════════════ */}
       <section className="py-24 bg-iron-900 relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroBackground} alt="" className="w-full h-full object-cover opacity-10" />
+          <img src={heroBackground} alt="" loading="lazy" className="w-full h-full object-cover opacity-10" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-iron-900/90"></div>
         </div>
         <div className="container mx-auto px-6 max-w-7xl relative z-10 text-center">

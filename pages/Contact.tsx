@@ -12,16 +12,18 @@ import {
   ArrowRightIcon,
 } from '../components/Icons';
 import SEOHead from '../components/SEOHead';
+import SchemaMarkup from '../components/SchemaMarkup';
 
 const Contact: React.FC = () => {
   return (
     <div className="bg-white font-body selection:bg-amber-500 selection:text-black">
       <SEOHead
         title="Contact JN Ornamental Design | Free Estimate | Houston TX"
-        description="Get a free estimate for custom iron fences, gates, railings & access control in Houston. Call (346) 302-3770 or fill out our form. Family-owned since 2016."
+        description="Get a free estimate for custom iron fences, gates, railings & access control in Houston. Call (832) 594-6075 or fill out our form. Family-owned since 2016."
         canonical="https://jnornamentaldesign.com/contact"
         keywords="free fence estimate houston, contact jn ornamental, gate quote houston tx, railing estimate near me, fence contractor phone number houston"
       />
+      <SchemaMarkup type="ContactPage" pageUrl="https://jnornamentaldesign.com/contact" />
       {/* Hero */}
       <section className="relative py-24 bg-iron-900 overflow-hidden">
         {/* Industrial diagonal pattern */}
@@ -196,7 +198,7 @@ const Contact: React.FC = () => {
             {/* Map Embed */}
             <div className="rounded-lg overflow-hidden shadow-2xl border border-gray-700">
               <iframe
-                src="https://www.google.com/maps?q=410+A+Northville+St,+Houston,+TX+77037&output=embed"
+                src="https://www.google.com/maps?q=410+A+Northville+St,+Houston,+TX+77038&output=embed"
                 width="100%"
                 height="400"
                 style={{ border: 0 }}
@@ -211,12 +213,12 @@ const Contact: React.FC = () => {
               <span className="text-amber-500 font-display font-bold uppercase tracking-widest text-xs mb-3 block">Find Us</span>
               <h2 className="font-display text-3xl font-bold text-white mb-6 uppercase">Visit Our Houston Workshop</h2>
               <p className="text-gray-300 font-body normal-case leading-relaxed mb-6">
-                Our fabrication shop is located at 410 A Northville St, Houston, TX 77037. Stop by to see our work in person, discuss your project, or pick up materials. We welcome walk-ins during business hours.
+                Our fabrication shop is located at 410 A Northville St, Houston, TX 77038. Stop by to see our work in person, discuss your project, or pick up materials. We welcome walk-ins during business hours.
               </p>
               <div className="space-y-4 mb-8">
                 <div className="flex items-center gap-3 text-gray-300">
                   <MapPinIcon className="w-5 h-5 text-amber-500 flex-shrink-0" />
-                  <span className="font-body normal-case">410 A Northville St, Houston, TX 77037</span>
+                  <span className="font-body normal-case">410 A Northville St, Houston, TX 77038</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <ClockIcon className="w-5 h-5 text-amber-500 flex-shrink-0" />

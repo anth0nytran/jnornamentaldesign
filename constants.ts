@@ -1,9 +1,16 @@
-import { BusinessInfo, Review, ServiceCategory, GalleryImage } from './types';
+import { BusinessInfo, ServiceCategory, GalleryImage } from './types';
 import serviceAccess from './assets/service-access.png';
-import serviceFence from './assets/service-fence.png';
-import serviceGate from './assets/service-gate.png';
-import serviceRailing from './assets/service-railing.png';
-import fencesHeroBlack from './assets/fences-hero-clean-pro.png';
+
+// Gallery images for FEATURED_PROJECTS (Home page)
+import galleryCedarFence from './assets/gallery/Cedar Wood fence with 6inch bevel board botton.jpg';
+import galleryDrivewayGate from './assets/gallery/Double Driveway Gate at south of Houston.jpg';
+import galleryWroughtIron from './assets/gallery/Wrought Iron Fence at the heights.png';
+import gallerySecurityGate from './assets/gallery/Security Modern Gate.jpg';
+import galleryAccessHerod from './assets/gallery/IMG_0805.JPG';
+import galleryRailing from './assets/gallery/IMG_0241.png';
+import galleryOrnamentalWall from './assets/gallery/Ornamental wall at a commercial Project.png';
+import gatesHeroCustom from './assets/gallery/IMG_8283.png';
+import railingsHeroCustom from './assets/gallery/IMG_4194.png';
 
 export const BUSINESS_INFO: BusinessInfo = {
   name: 'JN Ornamental Design LLC',
@@ -11,12 +18,12 @@ export const BUSINESS_INFO: BusinessInfo = {
   tagline: 'Fencing & Fabrication',
   phone: '(832) 594-6075',
   email: 'jnornamentaldesign@gmail.com',
-  address: '410 Northville St, Unit A, Houston, TX',
+  address: '410 Northville St, Unit A, Houston, TX 77038',
   website: 'jnornamentaldesign.com',
   languages: ['English', 'Spanish'],
   yearsExperience: '10+',
   rating: 4.9,
-  reviewCount: 47,
+  reviewCount: 50,
   serviceAreas: ['Houston, TX', 'Katy', 'Sugar Land', 'The Woodlands', 'Cypress', 'Pearland'],
   credentials: ['BBB Accredited', 'A+ Rating', 'Thumbtack Top Pro', 'Licensed & Insured'],
   socialLinks: {
@@ -32,7 +39,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: 'Fences',
     slug: 'fences',
     description: 'From elegant wrought iron to practical chain link, we build fences that stand the test of time. Every fence is custom-fitted to your property with precision craftsmanship.',
-    heroImage: fencesHeroBlack,
+    heroImage: galleryCedarFence,
     services: [
       {
         title: 'Wrought Iron Fencing',
@@ -70,7 +77,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: 'Gates',
     slug: 'gates',
     description: 'Make a statement with a custom-designed gate. Whether you need a grand driveway entrance or a simple side gate, we create gates that combine beauty with security.',
-    heroImage: serviceGate,
+    heroImage: gatesHeroCustom,
     services: [
       {
         title: 'Driveway Gates',
@@ -108,7 +115,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: 'Railings',
     slug: 'railings',
     description: 'Safety meets artistry in our custom railing designs. From spiral staircases to balcony rails, we craft metalwork that elevates your space.',
-    heroImage: serviceRailing,
+    heroImage: railingsHeroCustom,
     services: [
       {
         title: 'Stair Railings',
@@ -146,7 +153,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     title: 'Access Control',
     slug: 'access-control',
     description: 'Secure your property with professional gate automation and access control systems. From keypads to smartphone-controlled entry, we install and maintain complete access solutions.',
-    heroImage: serviceAccess,
+    heroImage: galleryAccessHerod,
     services: [
       {
         title: 'Gate Automation',
@@ -170,66 +177,15 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
   }
 ];
 
-export const REVIEWS: Review[] = [
-  {
-    name: "Crystal Fernandez",
-    text: "Excellent service and top quality! Thank you JN Ornamental Design for giving my home a gorgeous look. The attention to detail was incredible.",
-    source: "Google",
-    date: "2 months ago",
-    stars: 5,
-    themes: ["excellent service", "top quality", "gorgeous look"]
-  },
-  {
-    name: "Ross Kuykendall",
-    text: "Very professional and worked with us on a custom design. From order to install was only about 10 days, and the install itself was completed in just one day. Highly recommend!",
-    source: "Google",
-    date: "3 months ago",
-    stars: 5,
-    themes: ["professional", "custom design", "fast turnaround"]
-  },
-  {
-    name: "Norvil Sims",
-    text: "They are good people to work with and they give a good quote/estimate. If you want a fence installed choose JN Ornamental. Very professional from start to finish.",
-    source: "Google",
-    date: "4 months ago",
-    stars: 5,
-    themes: ["good people", "good quote", "professional"]
-  },
-  {
-    name: "Gina Torres",
-    text: "Excellent communication, professional, punctual, clear communicator, timely. They kept me informed throughout the entire process. Would definitely use again.",
-    source: "Google",
-    date: "5 months ago",
-    stars: 5,
-    project: "New fence & gate installation",
-    themes: ["communication", "punctual", "professional"]
-  },
-  {
-    name: "Marcus Johnson",
-    text: "JN Ornamental built a beautiful spiral staircase for our backyard deck. The craftsmanship is outstanding and it's become the centerpiece of our outdoor space.",
-    source: "Google",
-    date: "6 months ago",
-    stars: 5,
-    themes: ["craftsmanship", "spiral staircase", "outstanding"]
-  },
-  {
-    name: "Gene Garcia",
-    text: "Very good job, arrived on time, excellent work. The iron gate they installed is exactly what we wanted. Fair pricing too.",
-    source: "Google",
-    date: "8 months ago",
-    stars: 5,
-    project: "Driveway gate installation",
-    themes: ["on time", "excellent work", "fair pricing"]
-  }
-];
+
 
 export const FEATURED_PROJECTS: GalleryImage[] = [
-  { src: 'https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?w=800', alt: 'Custom wrought iron driveway gate', category: 'Gates' },
-  { src: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800', alt: 'Decorative stair railing', category: 'Railings' },
-  { src: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=800', alt: 'Ornamental iron fence', category: 'Fences' },
-  { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800', alt: 'Automated gate system', category: 'Access Control' },
-  { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800', alt: 'Estate entrance gate', category: 'Gates' },
-  { src: 'https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800', alt: 'Modern balcony railing', category: 'Railings' },
+  { src: galleryDrivewayGate, alt: 'Double Driveway Gate — South Houston', category: 'Gates' },
+  { src: galleryRailing, alt: 'Custom Railing Design', category: 'Railings' },
+  { src: galleryWroughtIron, alt: 'Wrought Iron Fence — The Heights', category: 'Fences' },
+  { src: gallerySecurityGate, alt: 'Modern Security Gate', category: 'Gates' },
+  { src: galleryCedarFence, alt: 'Cedar Wood Fence with Bevel Board', category: 'Fences' },
+  { src: galleryOrnamentalWall, alt: 'Ornamental Wall — Commercial Project', category: 'Fences' },
 ];
 
 export const STATS = [

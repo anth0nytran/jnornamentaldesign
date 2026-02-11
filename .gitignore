@@ -12,6 +12,30 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Unused assets — not imported anywhere, saves ~36 MB on deploy
+assets/access-hero-main.png
+assets/fence-aluminum-modern-pro.png
+assets/fence-chainlink-black-pro.png
+assets/fence-iron-estate-pro.png
+assets/fence-wood-cedar-pro.png
+assets/fences-footer-black.png
+assets/fences-hero-black.png
+assets/fences-hero-clean-pro.png
+assets/hero\ background.png
+assets/hero-luxury-gate.png
+assets/jn_ornamental_logo.svg
+assets/reviews.png
+assets/service-fence.png
+assets/service-gate.png
+assets/service-railing.png
+assets/steps.png
+assets/gallery/IMG_0241(2).png
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

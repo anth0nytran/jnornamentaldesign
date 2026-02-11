@@ -1,7 +1,9 @@
 ﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { SERVICE_CATEGORIES, REVIEWS } from '../constants';
+import { SERVICE_CATEGORIES } from '../constants';
+import { FENCE_REVIEWS } from '../reviewsData';
+import ReviewCarousel from '../components/ReviewCarousel';
 import ContactForm from '../components/ContactForm';
 import {
     CheckCircleIcon,
@@ -14,10 +16,10 @@ import {
     ThumbUpIcon
 } from '../components/Icons';
 import fencesFooterLuxury from '../assets/fences-footer-luxury.png';
-import fenceWood from '../assets/fence-wood-cedar-pro.png';
-import fenceIron from '../assets/fence-iron-estate-pro.png';
-import fenceChain from '../assets/fence-chainlink-black-pro.png';
-import fenceAluminum from '../assets/fence-aluminum-modern-pro.png';
+import fenceWood from '../assets/gallery/Cedar Wood fence with 6inch bevel board botton.jpg';
+import fenceIron from '../assets/gallery/Wrought Iron Fence at the heights.png';
+import fenceChain from '../assets/gallery/IMG_0805.JPG';
+import fenceAluminum from '../assets/gallery/IMG_0586.jpeg';
 import CTABanner from '../components/CTABanner';
 import SEOHead from '../components/SEOHead';
 import SchemaMarkup from '../components/SchemaMarkup';
@@ -27,10 +29,7 @@ const Fences: React.FC = () => {
 
     if (!category) return null;
 
-    const fenceReviews = REVIEWS.filter(r =>
-        r.text.toLowerCase().includes('fence') ||
-        r.text.toLowerCase().includes('professional')
-    ).slice(0, 3);
+
 
     // Map service titles to images
     const serviceImages: Record<string, string> = {
@@ -72,7 +71,7 @@ const Fences: React.FC = () => {
             <section className="relative min-h-[90vh] flex items-center bg-iron-900 overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img src={category.heroImage} alt="Custom Fencing in Houston" className="w-full h-full object-cover opacity-60" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/30"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/25"></div>
                 </div>
 
                 <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-24 pb-16">
@@ -200,7 +199,7 @@ const Fences: React.FC = () => {
                                 <div key={idx} className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} border border-gray-200 ${idx > 0 ? 'border-t-0' : ''} group hover:border-amber-500 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.08)]`}>
                                     {/* Image Side */}
                                     <div className="md:w-1/2 relative overflow-hidden h-72 md:h-auto md:min-h-[320px]">
-                                        <img src={ServiceImage} alt={service.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                        <img src={ServiceImage} alt={service.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
                                         {/* Number badge */}
                                         <div className="absolute top-6 left-6 bg-amber-500 text-black font-display font-bold text-lg px-4 py-2 tracking-widest">
@@ -234,40 +233,12 @@ const Fences: React.FC = () => {
                 </div>
             </section>
 
-            {/* REVIEWS — Industrial dark */}
-            <section className="py-24 bg-iron-900 relative overflow-hidden">
-                <div className="container mx-auto px-6 max-w-7xl relative z-10">
-                    <div className="text-center mb-16">
-                        <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4 uppercase">Houston Fence Installation Reviews</h2>
-                        <div className="flex items-center justify-center gap-2 text-amber-500 mb-4">
-                            {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-5 h-5" filled />)}
-                        </div>
-                        <p className="text-gray-400 font-body normal-case">Perfect 5.0 Rating on Google Reviews</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {fenceReviews.map((review, idx) => (
-                            <div key={idx} className="bg-white p-8 rounded-lg shadow-xl relative overflow-hidden">
-                                <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-500"></div>
-                                <div className="flex gap-1 text-amber-500 mb-4">
-                                    {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-4 h-4" filled />)}
-                                </div>
-                                <p className="text-gray-700 italic mb-6 leading-relaxed font-body normal-case">"{review.text}"</p>
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-iron-900 rounded-md flex items-center justify-center font-display font-bold text-amber-500">
-                                        {review.name.charAt(0)}
-                                    </div>
-                                    <div>
-                                        <div className="font-display font-bold text-iron-900 text-sm">{review.name}</div>
-                                        <div className="text-xs text-gray-400 font-body normal-case">Verified Client</div>
-                                    </div>
-                                    <GoogleIcon className="w-5 h-5 ml-auto opacity-50 grayscale" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            {/* REVIEWS — Scrollable carousel */}
+            <ReviewCarousel
+                reviews={FENCE_REVIEWS}
+                title="Houston Fence Installation Reviews"
+                variant="dark"
+            />
 
             {/* FAQ — Dark Industrial, 2-col grid */}
             <section className="py-20 bg-iron-900">
@@ -350,7 +321,7 @@ const Fences: React.FC = () => {
             {/* FINAL CTA — Industrial dark */}
             <section className="py-24 relative overflow-hidden">
                 <div className="absolute inset-0">
-                    <img src={fencesFooterLuxury} alt="Luxury Backyard Fence" className="w-full h-full object-cover" />
+                    <img src={fencesFooterLuxury} alt="Luxury Backyard Fence" loading="lazy" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/70"></div>
                 </div>
                 <div className="container mx-auto px-6 max-w-7xl relative z-10">

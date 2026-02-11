@@ -54,3 +54,20 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Masonry gallery responsive columns */
+.masonry-gallery {
+  column-count: 1;
+}
+
+@media (min-width: 640px) {
+  .masonry-gallery {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-gallery {
+    column-count: 3;
+  }
+}

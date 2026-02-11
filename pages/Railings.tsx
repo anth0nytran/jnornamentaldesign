@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { SERVICE_CATEGORIES, REVIEWS } from '../constants';
+import { SERVICE_CATEGORIES } from '../constants';
+import { RAILING_REVIEWS } from '../reviewsData';
+import ReviewCarousel from '../components/ReviewCarousel';
 import ContactForm from '../components/ContactForm';
 import {
     CheckCircleIcon,
@@ -11,30 +13,25 @@ import {
     ShieldCheckIcon,
     ClockIcon
 } from '../components/Icons';
-import railingsHero from '../assets/service-railing.png';
 import CTABanner from '../components/CTABanner';
 import SEOHead from '../components/SEOHead';
 import SchemaMarkup from '../components/SchemaMarkup';
 import fencesFooterLuxury from '../assets/fences-footer-luxury.png';
 
-import serviceSteps from '../assets/steps.png';
-import serviceBalcony from '../assets/fence-aluminum-modern-pro.png';
-import serviceSpiral from '../assets/service-railing.png';
-import serviceHandrail from '../assets/fence-iron-estate-pro.png';
+import serviceSteps from '../assets/gallery/IMG_4194.png';
+import serviceBalcony from '../assets/gallery/IMG_4927.png';
+import serviceSpiral from '../assets/gallery/IMG_0003.png';
+import serviceHandrail from '../assets/gallery/IMG_5159.png';
 
 const Railings: React.FC = () => {
     const category = SERVICE_CATEGORIES.find(c => c.slug === 'railings');
 
     if (!category) return null;
 
-    const railingReviews = REVIEWS.filter(r =>
-        r.text.toLowerCase().includes('stair') ||
-        r.project?.toLowerCase().includes('railing') ||
-        (r.text.toLowerCase().includes('quality') && r.stars === 5)
-    ).slice(0, 3);
+
 
     const serviceImages: Record<string, string> = {
-        'Stair': serviceSteps,
+        'Stair Rail': serviceSteps,
         'Balcony': serviceBalcony,
         'Spiral': serviceSpiral,
         'Handrail': serviceHandrail,
@@ -71,8 +68,8 @@ const Railings: React.FC = () => {
             {/* HERO — Industrial */}
             <section className="relative min-h-[90vh] flex items-center bg-iron-900 overflow-hidden">
                 <div className="absolute inset-0 z-0">
-                    <img src={railingsHero} alt="Custom Handrails and Staircases Houston" className="w-full h-full object-cover opacity-60" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/30"></div>
+                    <img src={category.heroImage} alt="Custom Handrails and Staircases Houston" className="w-full h-full object-cover opacity-60" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/25"></div>
                 </div>
 
                 <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-24 pb-16">
@@ -189,8 +186,8 @@ const Railings: React.FC = () => {
 
                             return (
                                 <div key={idx} className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} border border-gray-200 ${idx > 0 ? 'border-t-0' : ''} group hover:border-amber-500 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.08)]`}>
-                                    <div className="md:w-1/2 relative overflow-hidden h-72 md:h-auto md:min-h-[320px]">
-                                        <img src={ServiceImage} alt={service.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                    <div className="md:w-1/2 relative overflow-hidden h-72 md:h-full md:min-h-[450px]">
+                                        <img src={ServiceImage} alt={service.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
                                         <div className="absolute top-6 left-6 bg-amber-500 text-black font-display font-bold text-lg px-4 py-2 tracking-widest">{num}</div>
                                     </div>
@@ -214,38 +211,12 @@ const Railings: React.FC = () => {
                 </div>
             </section>
 
-            {/* REVIEWS */}
-            <section className="py-24 bg-iron-900 relative overflow-hidden">
-                <div className="container mx-auto px-6 max-w-7xl relative z-10">
-                    <div className="text-center mb-16">
-                        <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4 uppercase">Houston Railing Installation Reviews</h2>
-                        <div className="flex items-center justify-center gap-2 text-amber-500 mb-4">
-                            {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-5 h-5" filled />)}
-                        </div>
-                        <p className="text-gray-400 font-body normal-case">Houston's top choice for custom metalwork.</p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {railingReviews.map((review, idx) => (
-                            <div key={idx} className="bg-white p-8 rounded-lg shadow-xl relative overflow-hidden">
-                                <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-500"></div>
-                                <div className="flex gap-1 text-amber-500 mb-4">
-                                    {[...Array(5)].map((_, i) => <StarIcon key={i} className="w-4 h-4" filled />)}
-                                </div>
-                                <p className="text-gray-700 italic mb-6 leading-relaxed font-body normal-case">"{review.text}"</p>
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-iron-900 rounded-md flex items-center justify-center font-display font-bold text-amber-500">{review.name.charAt(0)}</div>
-                                    <div>
-                                        <div className="font-display font-bold text-iron-900 text-sm">{review.name}</div>
-                                        <div className="text-xs text-gray-400 font-body normal-case">Verified Client</div>
-                                    </div>
-                                    <GoogleIcon className="w-5 h-5 ml-auto opacity-50 grayscale" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            {/* REVIEWS — Scrollable carousel */}
+            <ReviewCarousel
+                reviews={RAILING_REVIEWS}
+                title="Houston Railing Installation Reviews"
+                variant="dark"
+            />
 
             {/* FAQ — Dark Industrial, 2-col grid */}
             <section className="py-20 bg-iron-900">
@@ -327,7 +298,7 @@ const Railings: React.FC = () => {
             {/* FINAL CTA */}
             <section className="py-24 relative overflow-hidden">
                 <div className="absolute inset-0">
-                    <img src={fencesFooterLuxury} alt="Luxury Estate Staircase" className="w-full h-full object-cover" />
+                    <img src={fencesFooterLuxury} alt="Luxury Estate Staircase" loading="lazy" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/70"></div>
                 </div>
                 <div className="container mx-auto px-6 max-w-7xl relative z-10">

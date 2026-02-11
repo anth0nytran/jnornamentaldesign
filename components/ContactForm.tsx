@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { BUSINESS_INFO, SERVICE_CATEGORIES } from '../constants';
 import { PhoneIcon, CheckCircleIcon, StarIcon, GoogleIcon } from './Icons';
 
@@ -19,13 +19,37 @@ const ContactForm: React.FC<ContactFormProps> = ({
     email: '',
     service: '',
     message: '',
+    website: '', // honeypot — hidden from real users
   });
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+  const formLoadedAt = useRef(Date.now());
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, _formLoadedAt: formLoadedAt.current }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || 'Something went wrong. Please try again.');
+      }
+
+      setSubmitStatus('success');
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -34,7 +58,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  if (isSubmitted) {
+  if (submitStatus === 'success') {
     return (
       <div className="text-center py-12">
         <div className="w-16 h-16 bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
@@ -164,11 +188,35 @@ const ContactForm: React.FC<ContactFormProps> = ({
           />
         </div>
 
+        {/* Honeypot — invisible to real users, bots fill it in */}
+        <input
+          type="text"
+          name="website"
+          value={formData.website}
+          onChange={handleChange}
+          autoComplete="off"
+          tabIndex={-1}
+          aria-hidden="true"
+          style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0 }}
+        />
+
+        {/* Error message */}
+        {errorMsg && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm font-body normal-case">
+            {errorMsg}
+          </div>
+        )}
+
         <button
           type="submit"
-          className="w-full bg-amber-500 hover:bg-amber-400 text-black font-display font-bold py-4 px-6 rounded-md uppercase tracking-widest transition-colors text-sm"
+          disabled={isSubmitting}
+          className={`w-full font-display font-bold py-4 px-6 rounded-md uppercase tracking-widest transition-all text-sm
+            ${isSubmitting
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-amber-500 hover:bg-amber-400 text-black'
+            }`}
         >
-          Request Free Estimate
+          {isSubmitting ? 'Sending...' : 'Request Free Estimate'}
         </button>
 
         {/* Stats under button */}

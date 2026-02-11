@@ -1,11 +1,12 @@
 export interface Review {
   name: string;
   text: string;
-  source: 'Facebook' | 'Thumbtack' | 'Google';
+  source: 'Facebook' | 'Thumbtack' | 'Google' | 'Yelp';
   date?: string;
   stars: number;
   project?: string;
   themes?: string[];
+  category?: 'fences' | 'gates' | 'railings' | 'access-control' | 'general';
 }
 
 export interface Service {
@@ -51,4 +52,6 @@ export interface GalleryImage {
   src: string;
   alt: string;
   category: string;
+  type?: 'image' | 'video';
+  orientation?: 'portrait' | 'landscape';
 }

@@ -26,6 +26,7 @@ const Header: React.FC = () => {
     { name: 'Home', path: '/' },
     ...SERVICE_CATEGORIES.map(cat => ({ name: cat.title, path: `/${cat.slug}` })),
     { name: 'Gallery', path: '/gallery' },
+    { name: 'Careers', path: '/careers' },
     { name: 'Contact', path: '/contact' },
   ];
 
@@ -65,7 +66,7 @@ const Header: React.FC = () => {
 
       {/* ── MAIN NAVIGATION ── */}
       <nav
-        className={`sticky top-0 z-50 transition-all duration-300 border-t-4 border-amber-500 ${isScrolled
+        className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
           ? 'bg-white shadow-lg shadow-navy-900/5 py-2'
           : 'bg-white py-3'
           } border-b border-navy-100`}
