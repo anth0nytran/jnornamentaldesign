@@ -216,7 +216,7 @@ const Gallery: React.FC = () => {
                                 <img
                                     src={filtered[lightbox].src}
                                     alt={filtered[lightbox].alt}
-                                    className="w-full h-full object-contain rounded-lg"
+                                    className="max-h-[75vh] w-auto max-w-full mx-auto object-contain rounded-lg shadow-2xl"
                                 />
                             )}
                             <div className="text-center mt-4">

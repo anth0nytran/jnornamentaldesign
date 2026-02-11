@@ -13,10 +13,19 @@ import {
 import SEOHead from '../components/SEOHead';
 import SchemaMarkup from '../components/SchemaMarkup';
 import heroImage from '../assets/gallery/starting at my Dad Garage.png';
+import {
+    formatPhoneInput,
+    isValidEmail,
+    isValidName,
+    isValidPhone,
+    normalizeEmail,
+    normalizeName,
+} from '../utils/formValidation';
 
 /* ─────────── types ─────────── */
 interface ApplicationForm {
-    name: string;
+    firstName: string;
+    lastName: string;
     phone: string;
     email: string;
     position: string;
@@ -67,7 +76,8 @@ const Careers: React.FC = () => {
 
     /* ── form state ── */
     const [formData, setFormData] = useState<ApplicationForm>({
-        name: '',
+        firstName: '',
+        lastName: '',
         phone: '',
         email: '',
         position: OPEN_POSITIONS[0]?.title ?? '',
@@ -84,7 +94,23 @@ const Careers: React.FC = () => {
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
     ) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        setFormData((prev) => {
+            if (name === 'phone') {
+                return { ...prev, phone: formatPhoneInput(value) };
+            }
+
+            if (name === 'firstName' || name === 'lastName') {
+                return { ...prev, [name]: value.replace(/[^A-Za-z' -]/g, '').slice(0, 50) };
+            }
+
+            if (name === 'email') {
+                return { ...prev, email: value.trimStart() };
+            }
+
+            return { ...prev, [name]: value };
+        });
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,23 +137,76 @@ const Careers: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitting(true);
         setErrorMsg('');
+
+        const normalizedData: ApplicationForm = {
+            ...formData,
+            firstName: normalizeName(formData.firstName),
+            lastName: normalizeName(formData.lastName),
+            phone: formatPhoneInput(formData.phone),
+            email: normalizeEmail(formData.email),
+            position: formData.position.trim(),
+            message: formData.message.trim(),
+        };
+
+        if (
+            !normalizedData.firstName ||
+            !normalizedData.lastName ||
+            !normalizedData.phone ||
+            !normalizedData.email ||
+            !normalizedData.position
+        ) {
+            setSubmitStatus('error');
+            setErrorMsg('First name, last name, phone, email, and position are required.');
+            setFormData((prev) => ({ ...prev, ...normalizedData }));
+            return;
+        }
+
+        if (!isValidName(normalizedData.firstName)) {
+            setSubmitStatus('error');
+            setErrorMsg('Enter a valid first name (letters, spaces, hyphens, apostrophes).');
+            return;
+        }
+
+        if (!isValidName(normalizedData.lastName)) {
+            setSubmitStatus('error');
+            setErrorMsg('Enter a valid last name (letters, spaces, hyphens, apostrophes).');
+            return;
+        }
+
+        if (!isValidPhone(normalizedData.phone)) {
+            setSubmitStatus('error');
+            setErrorMsg('Please enter a valid 10-digit phone number.');
+            return;
+        }
+
+        if (!isValidEmail(normalizedData.email)) {
+            setSubmitStatus('error');
+            setErrorMsg('Please enter a valid email address.');
+            return;
+        }
+
+        if (!resumeFile) {
+            setSubmitStatus('error');
+            setErrorMsg('Please attach your resume.');
+            return;
+        }
+
+        setFormData((prev) => ({ ...prev, ...normalizedData }));
+        setIsSubmitting(true);
 
         try {
             let resumeBase64 = '';
             let resumeFilename = '';
 
-            if (resumeFile) {
-                resumeBase64 = await fileToBase64(resumeFile);
-                resumeFilename = resumeFile.name;
-            }
+            resumeBase64 = await fileToBase64(resumeFile);
+            resumeFilename = resumeFile.name;
 
             const res = await fetch('/api/apply', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    ...formData,
+                    ...normalizedData,
                     resumeBase64,
                     resumeFilename,
                     _formLoadedAt: formLoadedAt.current,
@@ -500,20 +579,42 @@ const Careers: React.FC = () => {
                                 <form onSubmit={handleSubmit} className="space-y-5">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div>
-                                            <label htmlFor="career-name" className={labelClasses}>
-                                                Full Name <span className="text-amber-500">*</span>
+                                            <label htmlFor="career-firstName" className={labelClasses}>
+                                                First Name <span className="text-amber-500">*</span>
                                             </label>
                                             <input
                                                 type="text"
-                                                id="career-name"
-                                                name="name"
+                                                id="career-firstName"
+                                                name="firstName"
                                                 required
-                                                value={formData.name}
+                                                autoComplete="given-name"
+                                                value={formData.firstName}
                                                 onChange={handleChange}
                                                 className={inputClasses}
-                                                placeholder="John Doe"
+                                                placeholder="John"
+                                                maxLength={50}
                                             />
                                         </div>
+                                        <div>
+                                            <label htmlFor="career-lastName" className={labelClasses}>
+                                                Last Name <span className="text-amber-500">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="career-lastName"
+                                                name="lastName"
+                                                required
+                                                autoComplete="family-name"
+                                                value={formData.lastName}
+                                                onChange={handleChange}
+                                                className={inputClasses}
+                                                placeholder="Doe"
+                                                maxLength={50}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div>
                                             <label htmlFor="career-phone" className={labelClasses}>
                                                 Phone <span className="text-amber-500">*</span>
@@ -523,15 +624,15 @@ const Careers: React.FC = () => {
                                                 id="career-phone"
                                                 name="phone"
                                                 required
+                                                autoComplete="tel"
+                                                inputMode="numeric"
                                                 value={formData.phone}
                                                 onChange={handleChange}
                                                 className={inputClasses}
                                                 placeholder="(281) 555-0123"
+                                                maxLength={14}
                                             />
                                         </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div>
                                             <label htmlFor="career-email" className={labelClasses}>
                                                 Email <span className="text-amber-500">*</span>
@@ -541,31 +642,33 @@ const Careers: React.FC = () => {
                                                 id="career-email"
                                                 name="email"
                                                 required
+                                                autoComplete="email"
                                                 value={formData.email}
                                                 onChange={handleChange}
                                                 className={inputClasses}
                                                 placeholder="john@example.com"
                                             />
                                         </div>
-                                        <div>
-                                            <label htmlFor="career-position" className={labelClasses}>
-                                                Position <span className="text-amber-500">*</span>
-                                            </label>
-                                            <select
-                                                id="career-position"
-                                                name="position"
-                                                required
-                                                value={formData.position}
-                                                onChange={handleChange}
-                                                className={inputClasses}
-                                            >
-                                                {OPEN_POSITIONS.map((job) => (
-                                                    <option key={job.id} value={job.title}>
-                                                        {job.title}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="career-position" className={labelClasses}>
+                                            Position <span className="text-amber-500">*</span>
+                                        </label>
+                                        <select
+                                            id="career-position"
+                                            name="position"
+                                            required
+                                            value={formData.position}
+                                            onChange={handleChange}
+                                            className={inputClasses}
+                                        >
+                                            {OPEN_POSITIONS.map((job) => (
+                                                <option key={job.id} value={job.title}>
+                                                    {job.title}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
 
                                     {/* Resume Upload */}
@@ -603,7 +706,7 @@ const Careers: React.FC = () => {
                                     {/* Optional Message */}
                                     <div>
                                         <label htmlFor="career-message" className={labelClasses}>
-                                            Additional Notes
+                                            Additional Notes (Optional)
                                         </label>
                                         <textarea
                                             id="career-message"
