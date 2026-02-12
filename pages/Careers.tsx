@@ -248,8 +248,22 @@ const Careers: React.FC = () => {
             />
             <SchemaMarkup type="LocalBusiness" />
 
+            {/* MOBILE HERO IMAGE (Visible < lg) */}
+            <div className="block lg:hidden relative w-full h-[45vh] bg-iron-900 overflow-hidden">
+                <img
+                    src={heroImage}
+                    alt="JN Ornamental fabrication shop"
+                    className="absolute inset-0 w-full h-full object-cover grayscale opacity-90"
+                />
+                {/* Gradient Fade */}
+                <div className="absolute inset-0 bg-gradient-to-t from-iron-900 via-iron-900/60 to-transparent"></div>
+            </div>
+
             {/* ══════════ HERO ══════════ */}
-            <section className="relative min-h-[80vh] flex items-center bg-iron-900 overflow-hidden">
+            <section className="relative min-h-[50vh] lg:min-h-[80vh] flex items-start lg:items-center bg-iron-900 overflow-visible lg:overflow-hidden -mt-6 lg:mt-0 pt-0 lg:py-0">
+                {/* Floating Orange Bar at Top of Content */}
+                <div className="block lg:hidden absolute top-0 left-0 w-full h-1 bg-amber-500 z-20 shadow-[0_0_15px_rgba(245,158,11,0.5)]"></div>
+
                 {/* Right side image — visible on lg+ */}
                 <div className="hidden lg:block absolute top-0 right-0 w-[60%] h-full z-[1]">
                     <img
@@ -270,14 +284,15 @@ const Careers: React.FC = () => {
                 />
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-amber-500 z-10" />
 
-                <div className="container mx-auto px-6 max-w-7xl relative z-10 py-20 md:py-28">
-                    <div className="lg:max-w-[55%]">
+                <div className="container mx-auto px-6 max-w-7xl relative z-30 py-0 pb-12 pt-0 lg:py-28">
+                    <div className="lg:max-w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
+                            className="flex flex-col items-center lg:items-start w-full"
                         >
-                            <div className="inline-flex items-center gap-3 bg-amber-500 px-5 py-2 mb-6">
+                            <div className="inline-flex items-center gap-3 bg-amber-500 px-5 py-2 mb-6 -mt-4 relative z-30 shadow-lg shadow-black/20">
                                 <span className="text-sm font-display font-bold text-black tracking-widest uppercase">
                                     We&apos;re Hiring
                                 </span>
@@ -288,7 +303,7 @@ const Careers: React.FC = () => {
                                 <span className="text-amber-500">With Us</span>
                             </h1>
 
-                            <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl mb-8 font-body font-light normal-case">
+                            <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl mb-8 font-body font-light normal-case mx-auto lg:mx-0">
                                 Join Houston&apos;s most trusted ornamental iron crew. We&apos;re looking for
                                 skilled craftsmen who take pride in what they build.
                             </p>
@@ -302,12 +317,12 @@ const Careers: React.FC = () => {
                             </button>
 
                             {/* Trust Badges */}
-                            <div className="flex flex-wrap gap-4 md:gap-8 border-t border-white/20 pt-8 w-full">
+                            <div className="flex flex-wrap justify-center lg:justify-start gap-4 md:gap-8 border-t border-white/20 pt-8 w-full">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 bg-amber-500/20 flex items-center justify-center text-amber-500">
                                         <ClockIcon className="w-5 h-5" />
                                     </div>
-                                    <div>
+                                    <div className="text-left">
                                         <div className="text-white font-display font-bold text-sm">FULL-TIME HOURS</div>
                                         <div className="text-white/40 text-xs font-body normal-case">Mon – Sat</div>
                                     </div>
@@ -316,7 +331,7 @@ const Careers: React.FC = () => {
                                     <div className="w-10 h-10 bg-amber-500/20 flex items-center justify-center text-amber-500">
                                         <MapPinIcon className="w-5 h-5" />
                                     </div>
-                                    <div>
+                                    <div className="text-left">
                                         <div className="text-white font-display font-bold text-sm">HOUSTON, TX</div>
                                         <div className="text-white/40 text-xs font-body normal-case">Shop + Field</div>
                                     </div>
@@ -325,7 +340,7 @@ const Careers: React.FC = () => {
                                     <div className="w-10 h-10 bg-amber-500/20 flex items-center justify-center text-amber-500">
                                         <ShieldCheckIcon className="w-5 h-5" />
                                     </div>
-                                    <div>
+                                    <div className="text-left">
                                         <div className="text-white font-display font-bold text-sm">COMPETITIVE PAY</div>
                                         <div className="text-white/40 text-xs font-body normal-case">Based on Experience</div>
                                     </div>
@@ -794,7 +809,7 @@ const Careers: React.FC = () => {
                     </div>
                 </div>
             </section>
-        </div>
+        </div >
     );
 };
 

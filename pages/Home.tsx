@@ -92,12 +92,38 @@ const Home: React.FC = () => {
       {/* ═══════════════════════════════════════════════════════════
           HERO SECTION — Bold Industrial
       ═══════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[90vh] flex items-center bg-iron-900 overflow-hidden">
-        {/* Slideshow Background */}
-        <div className="absolute inset-0 z-0">
+      <section className="relative lg:min-h-[90vh] lg:flex lg:items-center bg-iron-900 overflow-hidden">
+        {/* 
+            MOBILE SLIDESHOW (Visible < lg)
+            Replaces the background image with a dedicated top container so images aren't cropped/deformed.
+        */}
+        <div className="block lg:hidden relative w-full h-[45vh] bg-iron-900 overflow-hidden">
           <AnimatePresence mode="popLayout">
             <motion.img
-              key={currentSlide}
+              key={`mobile-${currentSlide}`}
+              src={HERO_SLIDES[currentSlide]}
+              alt="JN Ornamental Design project showcase"
+              className="absolute inset-0 w-full h-full object-cover"
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1.05 }}
+              exit={{ opacity: 0 }}
+              transition={{ opacity: { duration: 1.2 }, scale: { duration: 6 } }}
+            />
+          </AnimatePresence>
+          {/* Bottom fade to blend into the content below */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-iron-900 to-transparent z-10"></div>
+          {/* Floating Orange Bar at Top of Content MATCHING SERVICE PAGES */}
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-amber-500 z-20 shadow-[0_0_15px_rgba(245,158,11,0.5)]"></div>
+        </div>
+
+        {/* 
+            DESKTOP SLIDESHOW (Visible >= lg)
+            Original full-screen background behavior.
+        */}
+        <div className="hidden lg:block absolute inset-0 z-0">
+          <AnimatePresence mode="popLayout">
+            <motion.img
+              key={`desktop-${currentSlide}`}
               src={HERO_SLIDES[currentSlide]}
               alt="JN Ornamental Design project showcase"
               className="absolute inset-0 w-full h-full object-cover"
@@ -111,37 +137,38 @@ const Home: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/25 z-[1]"></div>
         </div>
 
-        <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-20 pb-12">
+        <div className="container mx-auto px-6 max-w-7xl relative z-30 -mt-6 lg:mt-0 pt-0 pb-12 lg:pt-20">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
             {/* Left Column: Copy */}
-            <div className="lg:col-span-7 flex flex-col items-start pt-10 lg:pt-0">
+            <div className="lg:col-span-7 flex flex-col items-center lg:items-start pt-0 lg:pt-0">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}
+                className="flex flex-col items-center lg:items-start w-full"
               >
                 {/* Badge — Industrial yellow bar */}
-                <div className="inline-flex items-center gap-3 bg-amber-500 px-5 py-2 mb-8">
+                <div className="inline-flex items-center gap-3 bg-amber-500 px-5 py-2 mb-8 mt-2 relative z-30 shadow-lg shadow-black/50">
                   <span className="text-sm font-display font-bold text-black tracking-widest uppercase">
                     Family Owned &amp; Operated Since 2016
                   </span>
                 </div>
 
-                <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight mb-6 uppercase">
+                <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[0.95] tracking-tight mb-6 uppercase text-center lg:text-left">
                   Custom Iron Fences, Gates &amp;{' '}
                   <span className="text-amber-500">
                     Railings in Houston
                   </span>
                 </h1>
 
-                <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl mb-10 font-body font-light normal-case">
+                <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl mb-10 font-body font-light normal-case text-center lg:text-left mx-auto lg:mx-0">
                   Architectural grade fencing and industrial fabrication
                   for Texas' most secure properties.
                 </p>
 
                 {/* CTA Buttons — Industrial squared */}
-                <div className="flex flex-wrap gap-4 mb-12">
+                <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-12 w-full">
                   <Link
                     to="/contact#quote"
                     className="btn-primary inline-flex items-center gap-3 text-base"
@@ -157,7 +184,7 @@ const Home: React.FC = () => {
                 </div>
 
                 {/* Stats row */}
-                <div className="grid grid-cols-3 gap-6 md:gap-12 border-t border-white/20 pt-8 w-full max-w-lg">
+                <div className="grid grid-cols-3 gap-6 md:gap-12 border-t border-white/20 pt-8 w-full max-w-lg mx-auto lg:mx-0 text-center lg:text-left">
                   <div>
                     <div className="text-3xl font-display font-bold text-amber-500 mb-1">10+</div>
                     <div className="text-xs text-gray-400 uppercase tracking-widest font-semibold font-body">Years Exp.</div>

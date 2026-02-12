@@ -159,6 +159,35 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
     const prev = useCallback(() => setPage((p) => Math.max(0, p - 1)), []);
     const next = useCallback(() => setPage((p) => Math.min(totalPages - 1, p + 1)), [totalPages]);
 
+    // Swipe logic
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e: React.TouchEvent) => {
+        setTouchEnd(null);
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+
+        if (isLeftSwipe && page < totalPages - 1) {
+            next();
+        }
+        if (isRightSwipe && page > 0) {
+            prev();
+        }
+    };
+
     const isDark = variant === 'dark';
 
     return (
@@ -216,8 +245,11 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
 
                 {/* Review Cards Grid */}
                 <div
-                    className="grid gap-6 transition-opacity duration-300"
+                    className="grid gap-6 transition-opacity duration-300 touch-pan-y"
                     style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
                 >
                     {currentReviews.map((review, idx) => (
                         <ReviewCard key={`${review.name}-${page}-${idx}`} review={review} />
@@ -234,18 +266,12 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
                     >
                         <ChevronLeft className="w-5 h-5" />
                     </button>
-                    {/* Dot indicators */}
-                    <div className="flex gap-1.5">
-                        {Array.from({ length: totalPages }).map((_, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setPage(i)}
-                                className={`w-2 h-2 rounded-full transition-all ${i === page ? 'bg-amber-500 w-6' : isDark ? 'bg-white/30' : 'bg-gray-300'
-                                    }`}
-                                aria-label={`Go to page ${i + 1}`}
-                            />
-                        ))}
-                    </div>
+
+                    {/* Replaced Dots with Text Counter for usability */}
+                    <span className={`text-sm font-display font-bold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        Page {page + 1} of {totalPages}
+                    </span>
+
                     <button
                         onClick={next}
                         disabled={page === totalPages - 1}

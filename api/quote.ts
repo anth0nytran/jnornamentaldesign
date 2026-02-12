@@ -9,7 +9,7 @@ import {
   normalizeName,
   normalizeText,
   splitFullName,
-} from '../utils/formValidation';
+} from './formValidation';
 import { checkSpam } from './spamGuard';
 
 /**

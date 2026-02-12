@@ -65,19 +65,34 @@ const Gates: React.FC = () => {
                 ]}
             />
 
+            {/* MOBILE HERO IMAGE (Visible < lg) */}
+            <div className="block lg:hidden relative w-full h-[45vh] bg-iron-900 overflow-hidden">
+                <img
+                    src={category.heroImage}
+                    alt="Custom Driveway Gates Houston"
+                    className="absolute inset-0 w-full h-full object-cover"
+                />
+                {/* Gradient Fade */}
+                <div className="absolute inset-0 bg-gradient-to-t from-iron-900 via-iron-900/60 to-transparent"></div>
+            </div>
+
             {/* HERO — Industrial */}
-            <section className="relative min-h-[90vh] flex items-center bg-iron-900 overflow-hidden">
-                <div className="absolute inset-0 z-0">
+            <section className="relative min-h-[50vh] lg:min-h-[90vh] flex items-start lg:items-center bg-iron-900 overflow-visible lg:overflow-hidden -mt-6 lg:mt-0 pt-0 lg:pt-24 pb-16">
+                {/* Floating Orange Bar at Top of Content */}
+                <div className="block lg:hidden absolute top-0 left-0 w-full h-1 bg-amber-500 z-20 shadow-[0_0_15px_rgba(245,158,11,0.5)]"></div>
+
+                {/* DESKTOP BACKGROUND (Visible >= lg) */}
+                <div className="hidden lg:block absolute inset-0 z-0">
                     <img src={category.heroImage} alt="Custom Driveway Gates Houston" className="w-full h-full object-cover opacity-60" />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/25"></div>
                 </div>
 
-                <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-24 pb-16">
+                <div className="container mx-auto px-6 max-w-7xl relative z-30 text-center lg:text-left pt-0 pb-16">
                     <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
-                        <div className="lg:col-span-7 flex flex-col items-start">
+                        <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-                                <div className="inline-flex items-center gap-3 bg-amber-500 px-5 py-2 mb-6">
+                                <div className="inline-flex items-center gap-3 bg-amber-500 px-5 py-2 mb-6 -mt-10 relative z-30 shadow-lg shadow-black/20">
                                     <span className="text-sm font-display font-bold text-black tracking-widest uppercase">
                                         Houston's #1 Gate Fabricator
                                     </span>
@@ -88,16 +103,16 @@ const Gates: React.FC = () => {
                                     <span className="text-amber-500">Gates in Houston TX</span>
                                 </h1>
 
-                                <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl mb-8 font-body font-light normal-case">
+                                <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl mb-8 font-body font-light normal-case mx-auto lg:mx-0">
                                     Make a statement with a driveway gate that combines artistic ironwork with rock-solid security. Hand-forged in Houston.
                                 </p>
 
-                                <div className="flex flex-wrap gap-4 md:gap-8 border-t border-white/20 pt-8 w-full">
+                                <div className="flex flex-wrap justify-center lg:justify-start gap-4 md:gap-8 border-t border-white/20 pt-8 w-full">
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 bg-amber-500/20 flex items-center justify-center text-amber-500">
                                             <ShieldCheckIcon className="w-5 h-5" />
                                         </div>
-                                        <div>
+                                        <div className="text-left">
                                             <div className="text-white font-display font-bold text-sm">HEAVY GAUGE STEEL</div>
                                             <div className="text-white/40 text-xs font-body normal-case">Built to Last</div>
                                         </div>
@@ -106,7 +121,7 @@ const Gates: React.FC = () => {
                                         <div className="w-10 h-10 bg-amber-500/20 flex items-center justify-center text-amber-500">
                                             <ClockIcon className="w-5 h-5" />
                                         </div>
-                                        <div>
+                                        <div className="text-left">
                                             <div className="text-white font-display font-bold text-sm">CUSTOM DESIGN</div>
                                             <div className="text-white/40 text-xs font-body normal-case">Any Style or Size</div>
                                         </div>
@@ -116,7 +131,7 @@ const Gates: React.FC = () => {
                         </div>
 
                         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="lg:col-span-5 w-full">
-                            <div className="bg-white rounded-lg shadow-2xl shadow-black/60 p-6 md:p-8 relative overflow-hidden">
+                            <div className="bg-white rounded-lg shadow-2xl shadow-black/60 p-6 md:p-8 relative overflow-hidden text-left">
                                 <div className="absolute top-0 left-0 w-full h-2 bg-amber-500"></div>
                                 <div className="mb-6">
                                     <h3 className="font-display text-2xl font-bold text-iron-900 mb-2">GET A GATE QUOTE</h3>
