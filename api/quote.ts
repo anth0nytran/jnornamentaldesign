@@ -223,130 +223,137 @@ function buildQuoteEmail(data: {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>New Quote Request</title>
 </head>
-<body style="margin:0;padding:0;background-color:#f4f4f5;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f5;padding:40px 16px;">
+<body style="margin:0;padding:0;background-color:#09090b;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;-webkit-font-smoothing:antialiased;">
+  
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#09090b;padding:40px 16px;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+        
+        <!-- MAIN CONTAINER -->
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;min-width:320px;background-color:#18181b;border-radius:8px;overflow:hidden;box-shadow:0 8px 16px rgba(0,0,0,0.4);border:1px solid #27272a;">
           
-          <!-- ── TOP ACCENT BAR ── -->
+          <!-- BRAND ACCENT BAR -->
           <tr>
-            <td style="height:6px;background-color:#f59e0b;"></td>
+            <td style="height:4px;background-color:#f59e0b;"></td>
           </tr>
 
-          <!-- ── HEADER ── -->
+          <!-- HEADER -->
           <tr>
-            <td style="padding:40px 40px 30px;background-color:#ffffff;text-align:center;border-bottom:1px solid #e4e4e7;">
-              <h1 style="margin:0;font-size:28px;font-weight:900;color:#18181b;letter-spacing:-0.5px;text-transform:uppercase;line-height:1.2;">QUICK LEAD ALERT</h1>
-              <p style="margin:8px 0 0;font-size:14px;color:#71717a;font-weight:500;">RECEIVED VIA JNORNAMENTALDESIGN.COM</p>
-              
-              <!-- BIG TIMESTAMP -->
-              <div style="margin-top:24px;display:inline-block;background-color:#18181b;color:#f59e0b;padding:8px 16px;border-radius:4px;font-weight:700;font-size:14px;letter-spacing:0.5px;">
-                ${timestamp}
-              </div>
+            <td style="padding:40px 40px 30px;text-align:center;">
+              <p style="margin:0;color:#f59e0b;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;">New Quote Request</p>
+              <h1 style="margin:12px 0 8px;font-size:28px;font-weight:700;color:#ffffff;line-height:1.2;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">${name}</h1>
+              <p style="margin:0;font-size:14px;color:#a1a1aa;">Sent form from <a href="https://jnornamentaldesign.com" style="color:#71717a;text-decoration:none;">jnornamentaldesign.com</a></p>
             </td>
           </tr>
 
-          <!-- ── ACTION BUTTONS ── -->
+          <!-- PRIMARY ACTIONS (SIDE BY SIDE) -->
           <tr>
-            <td style="padding:30px 40px;background-color:#fafafa;border-bottom:1px solid #e4e4e7;">
+            <td style="padding:0 40px 40px;">
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td align="center">
+                  <td width="48%" align="center">
+                    <!-- CALL BUTTON -->
+                    <a href="tel:${phone}" style="display:block;background-color:#f59e0b;color:#09090b;font-size:14px;font-weight:800;text-decoration:none;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                      Call Now
+                    </a>
+                  </td>
+                  
+                  <td width="4%"></td> <!-- SPACER -->
+
+                  <td width="48%" align="center">
                     ${email ? `
                     <!-- EMAIL BUTTON -->
-                    <a href="mailto:${email}" style="display:inline-block;margin:0 10px;background-color:#18181b;color:#ffffff;font-size:14px;font-weight:800;text-decoration:none;padding:14px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:1px;">
-                      Reply via Email
+                    <a href="mailto:${email}" style="display:block;background-color:#27272a;color:#ffffff;font-size:14px;font-weight:800;text-decoration:none;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;border:1px solid #3f3f46;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                      Email Now
                     </a>
-                    ` : ''}
-                    
-                    <!-- CALL BUTTON -->
-                    <a href="tel:${phone}" style="display:inline-block;margin:0 10px;background-color:#f59e0b;color:#000000;font-size:14px;font-weight:800;text-decoration:none;padding:14px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:1px;">
-                      Call Lead Now
-                    </a>
+                    ` : `
+                    <!-- EMAIL DISABLED -->
+                    <div style="display:block;background-color:#27272a;color:#52525b;font-size:14px;font-weight:800;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;border:1px solid #3f3f46;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                      No Email
+                    </div>
+                    `}
                   </td>
                 </tr>
               </table>
+              <p style="margin:16px 0 0;text-align:center;font-size:12px;color:#52525b;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                Tap buttons above to contact directly
+              </p>
             </td>
           </tr>
 
-          <!-- ── DETAILS GRID ── -->
+          <!-- DETAILS CARD -->
           <tr>
-            <td style="padding:40px;">
-              <table width="100%" cellpadding="0" cellspacing="0">
+            <td style="padding:0 40px 40px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#202023;border-radius:8px;border:1px solid #27272a;">
                 
+                <!-- SERVICE ROW -->
                 <tr>
-                  <td style="padding-bottom:24px;width:120px;vertical-align:top;">
-                    <span style="font-size:11px;font-weight:800;color:#a1a1aa;text-transform:uppercase;letter-spacing:1px;">CUSTOMER</span>
-                  </td>
-                  <td style="padding-bottom:24px;vertical-align:top;">
-                    <span style="font-size:16px;font-weight:700;color:#18181b;">${name}</span>
+                  <td style="padding:24px 24px 0;">
+                    <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#71717a;text-transform:uppercase;letter-spacing:1px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">Service Interest</p>
+                    <p style="margin:0;font-size:16px;color:#ffffff;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">${service}</p>
                   </td>
                 </tr>
 
+                <!-- DIVIDER -->
                 <tr>
-                  <td style="padding-bottom:24px;width:120px;vertical-align:top;">
-                    <span style="font-size:11px;font-weight:800;color:#a1a1aa;text-transform:uppercase;letter-spacing:1px;">PHONE</span>
-                  </td>
-                  <td style="padding-bottom:24px;vertical-align:top;">
-                    <a href="tel:${phone}" style="font-size:16px;font-weight:600;color:#f59e0b;text-decoration:none;">${phone}</a>
-                  </td>
-                </tr>
-
-                ${email ? `
-                <tr>
-                  <td style="padding-bottom:24px;width:120px;vertical-align:top;">
-                    <span style="font-size:11px;font-weight:800;color:#a1a1aa;text-transform:uppercase;letter-spacing:1px;">EMAIL</span>
-                  </td>
-                  <td style="padding-bottom:24px;vertical-align:top;">
-                    <a href="mailto:${email}" style="font-size:16px;font-weight:600;color:#18181b;text-decoration:none;border-bottom:1px solid #e4e4e7;">${email}</a>
-                  </td>
-                </tr>
-                ` : ''}
-
-                <tr>
-                  <td style="padding-bottom:24px;width:120px;vertical-align:top;">
-                    <span style="font-size:11px;font-weight:800;color:#a1a1aa;text-transform:uppercase;letter-spacing:1px;">INTEREST</span>
-                  </td>
-                  <td style="padding-bottom:24px;vertical-align:top;">
-                    <span style="display:inline-block;padding:4px 12px;background-color:#fffbeb;color:#b45309;font-size:12px;font-weight:800;border-radius:99px;text-transform:uppercase;letter-spacing:0.5px;">${service}</span>
+                  <td style="padding:24px;">
+                    <div style="height:1px;background-color:#3f3f46;"></div>
                   </td>
                 </tr>
 
                 ${message ? `
+                <!-- MESSAGE ROW -->
                 <tr>
-                  <td style="width:120px;vertical-align:top;padding-top:8px;">
-                     <span style="font-size:11px;font-weight:800;color:#a1a1aa;text-transform:uppercase;letter-spacing:1px;">DETAILS</span>
-                  </td>
-                  <td style="vertical-align:top;padding-top:8px;">
-                    <p style="margin:0;font-size:15px;line-height:1.6;color:#52525b;white-space:pre-wrap;">${message}</p>
+                  <td style="padding:0 24px 24px;">
+                    <p style="margin:0 0 8px;font-size:11px;font-weight:700;color:#71717a;text-transform:uppercase;letter-spacing:1px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">Message</p>
+                    <p style="margin:0;font-size:15px;line-height:1.6;color:#d4d4d8;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;white-space:pre-wrap;">${message}</p>
                   </td>
                 </tr>
                 ` : ''}
+
+                <!-- CONTACT DETAILS (SECONDARY) -->
+                <tr>
+                   <td style="padding:0 24px 24px;">
+                      <div style="height:1px;background-color:#3f3f46;margin-bottom:24px;"></div>
+                      
+                      <p style="margin:0 0 8px;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                        <strong style="color:#ffffff;">Phone:</strong> <a href="tel:${phone}" style="color:#a1a1aa;text-decoration:none;">${phone}</a>
+                      </p>
+                      ${email ? `
+                      <p style="margin:0 0 8px;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                        <strong style="color:#ffffff;">Email:</strong> <a href="mailto:${email}" style="color:#a1a1aa;text-decoration:none;">${email}</a>
+                      </p>
+                      ` : ''}
+                      <p style="margin:0;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                        <strong style="color:#ffffff;">Received:</strong> ${timestamp}
+                      </p>
+                   </td>
+                </tr>
 
               </table>
             </td>
           </tr>
 
-          <!-- ── FOOTER ── -->
+          <!-- FOOTER -->
           <tr>
-            <td style="background-color:#18181b;padding:30px;text-align:center;">
-              <p style="margin:0 0 10px;font-size:12px;color:#a1a1aa;letter-spacing:0.5px;">
-                VN Ornamental Design &bull; Quote Automation System
+            <td style="background-color:#141417;padding:24px;text-align:center;border-top:1px solid #27272a;">
+              <p style="margin:0;font-size:11px;color:#52525b;text-transform:uppercase;letter-spacing:1px;font-weight:700;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                Powered by <span style="color:#f59e0b;">QuickLaunchWeb</span>
               </p>
-              <div style="margin-top:20px;border-top:1px solid #27272a;padding-top:20px;">
-                <a href="https://quicklaunchweb.com" style="font-size:11px;color:#52525b;text-decoration:none;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">
-                  Powered by <span style="color:#f59e0b;">QuickLaunchWeb</span>
-                </a>
-              </div>
             </td>
           </tr>
-          
+
         </table>
+
+        <p style="margin:24px 0 0;font-size:12px;color:#52525b;text-align:center;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+          © ${new Date().getFullYear()} JN Ornamental Design.
+        </p>
+
       </td>
     </tr>
   </table>
+
 </body>
 </html>
-    `.trim();
+  `.trim();
 }
