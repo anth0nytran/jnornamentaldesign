@@ -9,8 +9,8 @@ import {
   normalizeName,
   normalizeText,
   splitFullName,
-} from './formValidation';
-import { checkSpam } from './spamGuard';
+} from './formValidation.js';
+import { checkSpam } from './spamGuard.js';
 
 /**
  * POST /api/quote
