@@ -221,7 +221,15 @@ function buildQuoteEmail(data: {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
   <title>New Quote Request</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      supported-color-schemes: light dark;
+    }
+  </style>
 </head>
 <body style="margin:0;padding:0;background-color:#09090b;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;-webkit-font-smoothing:antialiased;">
   
@@ -246,34 +254,40 @@ function buildQuoteEmail(data: {
             </td>
           </tr>
 
-          <!-- PRIMARY ACTIONS (SIDE BY SIDE) -->
+          <!-- PRIMARY ACTIONS (STACKED) -->
           <tr>
             <td style="padding:0 40px 40px;">
               <table width="100%" cellpadding="0" cellspacing="0">
+                
+                <!-- CALL BUTTON -->
                 <tr>
-                  <td width="48%" align="center">
-                    <!-- CALL BUTTON -->
-                    <a href="tel:${phone}" style="display:block;background-color:#f59e0b;color:#09090b;font-size:14px;font-weight:800;text-decoration:none;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                  <td align="center">
+                    <a href="tel:${phone}" style="display:block;width:100%;background-color:#f59e0b;color:#09090b;font-size:14px;font-weight:800;text-decoration:none;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;box-sizing:border-box;">
                       Call Now
                     </a>
                   </td>
-                  
-                  <td width="4%"></td> <!-- SPACER -->
+                </tr>
 
-                  <td width="48%" align="center">
+                <!-- SPACER -->
+                <tr>
+                  <td height="12"></td>
+                </tr>
+
+                <!-- EMAIL BUTTON -->
+                <tr>
+                  <td align="center">
                     ${email ? `
-                    <!-- EMAIL BUTTON -->
-                    <a href="mailto:${email}" style="display:block;background-color:#27272a;color:#ffffff;font-size:14px;font-weight:800;text-decoration:none;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;border:1px solid #3f3f46;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                    <a href="mailto:${email}" style="display:block;width:100%;background-color:#27272a;color:#ffffff;font-size:14px;font-weight:800;text-decoration:none;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;border:1px solid #3f3f46;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;box-sizing:border-box;">
                       Email Now
                     </a>
                     ` : `
-                    <!-- EMAIL DISABLED -->
-                    <div style="display:block;background-color:#27272a;color:#52525b;font-size:14px;font-weight:800;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;border:1px solid #3f3f46;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                    <div style="display:block;width:100%;background-color:#27272a;color:#52525b;font-size:14px;font-weight:800;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;border:1px solid #3f3f46;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;box-sizing:border-box;">
                       No Email
                     </div>
                     `}
                   </td>
                 </tr>
+
               </table>
               <p style="margin:16px 0 0;text-align:center;font-size:12px;color:#52525b;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
                 Tap buttons above to contact directly
