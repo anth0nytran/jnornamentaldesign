@@ -29,6 +29,12 @@ const BLOCKED_DOMAIN_PATTERNS = [
     /^listing-/i,
     /^directory-/i,
     /^webmaster-/i,
+    /^marketing-/i,
+    /^leads?-/i,
+    /web.?design/i,
+    /web.?develop/i,
+    /seo/i,
+    /marketing/i,
 ];
 
 const BLOCKED_DOMAINS_EXACT = new Set([
@@ -39,10 +45,12 @@ const BLOCKED_DOMAINS_EXACT = new Set([
     'google-index-now.com',
     'submitwebsite.info',
     'addurl.info',
+    'wpwebbdesignings.com',
 ]);
 
 // ── Blocklisted message phrases ────────────────────────────────
 const BLOCKED_PHRASES = [
+    // SEO / indexing spam
     'search indexing',
     'web search results',
     'enlist',
@@ -68,6 +76,47 @@ const BLOCKED_PHRASES = [
     'seo service',
     'page rank',
     'search ranking',
+    // Web design / marketing solicitation spam
+    'web design service',
+    'app design service',
+    'website redesign',
+    'web and app design',
+    'wordpress web design',
+    'i recently visited your website',
+    'i visited your website',
+    'noticed a few areas',
+    'improve your website',
+    'enhance user experience',
+    'samples of my past work',
+    'client testimonials',
+    'company profile',
+    'modern redesign',
+    'mobile-friendly',
+    'google compliance',
+    'web security and google',
+    // Opt-out / unsubscribe language (hallmark of bulk spam)
+    'respond with stop',
+    'reply stop',
+    'reply with stop',
+    'opt out',
+    'optout',
+    'unsubscribe',
+    // Generic marketing / lead-gen spam
+    'digital marketing service',
+    'social media marketing',
+    'increase your traffic',
+    'grow your business online',
+    'online presence',
+    'lead generation',
+    'marketing strategy',
+    'marketing campaign',
+    'i can help your business',
+    'we can help your business',
+    'affordable web',
+    'free consultation',
+    'free quote for',
+    'free audit',
+    'complimentary audit',
 ];
 
 export function checkSpam(input: SpamCheckInput): SpamResult {
@@ -120,7 +169,25 @@ export function checkSpam(input: SpamCheckInput): SpamResult {
         if (/https?:\/\//i.test(input.message)) {
             return { blocked: true, reason: 'url-in-message' };
         }
+
+        // 7. Email address in message body — solicitors embed contact info
+        if (/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i.test(input.message)) {
+            return { blocked: true, reason: 'email-in-message' };
+        }
+
+        // 8. Phone number in message body (7+ consecutive digits)
+        if (/(?:\d[\s\-.()]*){7,}/.test(input.message)) {
+            return { blocked: true, reason: 'phone-in-message' };
+        }
+
+        // 9. Bare domain / URL without protocol (e.g. "example.com")
+        if (/\b[a-z0-9-]+\.(com|net|org|io|info|biz|co|us|uk)\b/i.test(input.message)) {
+            return { blocked: true, reason: 'domain-in-message' };
+        }
     }
+
+    // 10. Service mismatch — "Other" service with no real project details is suspicious
+    //     (most legitimate "Other" inquiries still describe what they need)
 
     return { blocked: false };
 }
