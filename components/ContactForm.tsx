@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { BUSINESS_INFO, SERVICE_CATEGORIES } from '../constants';
 import { formatPhoneInput, isValidEmail, isValidName, isValidPhone, normalizeEmail, normalizeName } from '../utils/formValidation';
 import { CheckCircleIcon, GoogleIcon, PhoneIcon, StarIcon } from './Icons';
@@ -20,8 +21,8 @@ interface ContactFormData {
 }
 
 const validateContactData = (data: ContactFormData): string | null => {
-    if (!data.firstName || !data.lastName || !data.phone || !data.email || !data.service) {
-        return 'First name, last name, phone, email, and service are required.';
+    if (!data.firstName || !data.lastName || !data.email || !data.service) {
+        return 'First name, last name, email, and service are required.';
     }
 
     if (!isValidName(data.firstName)) {
@@ -32,7 +33,7 @@ const validateContactData = (data: ContactFormData): string | null => {
         return 'Enter a valid last name (letters, spaces, hyphens, apostrophes).';
     }
 
-    if (!isValidPhone(data.phone)) {
+    if (data.phone && !isValidPhone(data.phone)) {
         return 'Please enter a valid 10-digit phone number.';
     }
 
@@ -153,11 +154,12 @@ const ContactForm: React.FC<ContactFormProps> = ({
         );
     }
 
-    const inputClasses = `w-full bg-white border-2 border-gray-300 rounded-md px-4 py-3 text-iron-900 font-body normal-case
-    placeholder:text-gray-400 focus:border-amber-500 focus:outline-none transition-colors`;
+    const isHero = variant === 'hero';
 
-    const labelClasses =
-        'block text-sm font-display font-bold text-iron-900 mb-2 uppercase tracking-wider';
+    const inputClasses = `w-full bg-white border-2 border-gray-300 rounded-md text-iron-900 font-body normal-case
+    placeholder:text-gray-400 focus:border-amber-500 focus:outline-none transition-colors ${isHero ? 'px-3 py-2.5 text-sm' : 'px-4 py-3'}`;
+
+    const labelClasses = `block font-display font-bold text-iron-900 uppercase tracking-wider ${isHero ? 'text-xs mb-1.5' : 'text-sm mb-2'}`;
 
     return (
         <div>
@@ -170,8 +172,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className={isHero ? 'space-y-3' : 'space-y-4'} noValidate>
+                <div className={`grid grid-cols-1 md:grid-cols-2 ${isHero ? 'gap-3' : 'gap-4'}`}>
                     <div>
                         <label htmlFor="firstName" className={labelClasses}>
                             First Name <span className="text-amber-500">*</span>
@@ -208,16 +210,15 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className={`grid grid-cols-1 md:grid-cols-2 ${isHero ? 'gap-3' : 'gap-4'}`}>
                     <div>
                         <label htmlFor="phone" className={labelClasses}>
-                            Phone <span className="text-amber-500">*</span>
+                            Phone
                         </label>
                         <input
                             type="tel"
                             id="phone"
                             name="phone"
-                            required
                             autoComplete="tel"
                             inputMode="numeric"
                             value={formData.phone}
@@ -278,7 +279,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     <textarea
                         id="message"
                         name="message"
-                        rows={4}
+                        rows={isHero ? 2 : 4}
                         value={formData.message}
                         onChange={handleChange}
                         className={inputClasses}
@@ -297,6 +298,22 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0 }}
                 />
 
+                <div className={`flex items-start ${isHero ? 'gap-2' : 'gap-3'}`}>
+                    <input
+                        type="checkbox"
+                        id="smsConsent"
+                        name="smsConsent"
+                        className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
+                    />
+                    <label htmlFor="smsConsent" className={`text-gray-500 font-body normal-case cursor-pointer ${isHero ? 'text-[10px] leading-snug' : 'text-xs leading-relaxed'}`}>
+                        I consent to receive SMS notifications, alerts &amp; occasional marketing messages from{' '}
+                        <strong className="text-iron-900">{BUSINESS_INFO.name}</strong>. Message frequency may vary. Msg &amp; data rates may apply.
+                        Text HELP for help. Reply STOP to unsubscribe.{' '}
+                        <Link to="/privacy" className="text-amber-600 underline hover:text-amber-500">Privacy Policy</Link> &amp;{' '}
+                        <Link to="/terms" className="text-amber-600 underline hover:text-amber-500">Terms</Link>.
+                    </label>
+                </div>
+
                 {errorMsg && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm font-body normal-case">
                         {errorMsg}
@@ -306,7 +323,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`w-full font-display font-bold py-4 px-6 rounded-md uppercase tracking-widest transition-all text-sm
+                    className={`w-full font-display font-bold rounded-md uppercase tracking-widest transition-all text-sm
+            ${isHero ? 'py-3 px-5' : 'py-4 px-6'}
             ${
                 isSubmitting
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -316,26 +334,28 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     {isSubmitting ? 'Sending...' : 'Request Free Estimate'}
                 </button>
 
-                <div className="flex items-center justify-center gap-6 pt-2">
-                    <div className="flex items-center gap-2">
-                        <GoogleIcon className="w-5 h-5" />
-                        <div className="flex text-amber-500">
-                            {[...Array(5)].map((_, i) => (
-                                <StarIcon key={i} className="w-3.5 h-3.5" filled />
-                            ))}
+                {!isHero && (
+                    <div className="flex items-center justify-center gap-6 pt-2">
+                        <div className="flex items-center gap-2">
+                            <GoogleIcon className="w-5 h-5" />
+                            <div className="flex text-amber-500">
+                                {[...Array(5)].map((_, i) => (
+                                    <StarIcon key={i} className="w-3.5 h-3.5" filled />
+                                ))}
+                            </div>
+                            <span className="text-sm font-display font-bold text-iron-900">
+                                {BUSINESS_INFO.rating}
+                            </span>
                         </div>
-                        <span className="text-sm font-display font-bold text-iron-900">
-                            {BUSINESS_INFO.rating}
-                        </span>
+                        <div className="h-4 w-px bg-gray-300"></div>
+                        <div className="text-sm text-gray-600 font-body normal-case">
+                            <span className="font-display font-bold text-iron-900">1,500+</span> Projects Done
+                        </div>
                     </div>
-                    <div className="h-4 w-px bg-gray-300"></div>
-                    <div className="text-sm text-gray-600 font-body normal-case">
-                        <span className="font-display font-bold text-iron-900">1,500+</span> Projects Done
-                    </div>
-                </div>
+                )}
 
-                <p className="text-center text-xs text-gray-400 pt-1 font-body normal-case">
-                    Your information is secure. We never share your data.
+                <p className={`text-center text-gray-400 font-body normal-case ${isHero ? 'text-[10px] pt-0.5' : 'text-xs pt-1'}`}>
+                    Your information is secure. We never share your data with third parties.
                 </p>
             </form>
         </div>

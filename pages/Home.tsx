@@ -208,12 +208,12 @@ const Home: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="lg:col-span-5 w-full"
             >
-              <div className="bg-white rounded-lg shadow-2xl shadow-black/60 p-6 md:p-8 relative overflow-hidden">
+              <div className="bg-white rounded-lg shadow-2xl shadow-black/60 p-5 md:p-7 relative overflow-hidden">
                 {/* Yellow top bar — thicker for industrial look */}
                 <div className="absolute top-0 left-0 w-full h-2 bg-amber-500"></div>
 
-                <div className="mb-6">
-                  <h3 className="font-display text-2xl font-bold text-iron-900 mb-2">
+                <div className="mb-4">
+                  <h3 className="font-display text-xl md:text-2xl font-bold text-iron-900 mb-1">
                     GET A FREE ESTIMATE
                   </h3>
                   <p className="text-gray-500 text-sm font-body normal-case">
@@ -222,11 +222,6 @@ const Home: React.FC = () => {
                 </div>
 
                 <ContactForm variant="hero" />
-
-                <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-400 font-body normal-case">
-                  <CheckCircleIcon className="w-3 h-3 text-green-500" />
-                  Your information is kept private
-                </div>
               </div>
             </motion.div>
 

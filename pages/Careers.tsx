@@ -152,12 +152,11 @@ const Careers: React.FC = () => {
         if (
             !normalizedData.firstName ||
             !normalizedData.lastName ||
-            !normalizedData.phone ||
             !normalizedData.email ||
             !normalizedData.position
         ) {
             setSubmitStatus('error');
-            setErrorMsg('First name, last name, phone, email, and position are required.');
+            setErrorMsg('First name, last name, email, and position are required.');
             setFormData((prev) => ({ ...prev, ...normalizedData }));
             return;
         }
@@ -174,7 +173,7 @@ const Careers: React.FC = () => {
             return;
         }
 
-        if (!isValidPhone(normalizedData.phone)) {
+        if (normalizedData.phone && !isValidPhone(normalizedData.phone)) {
             setSubmitStatus('error');
             setErrorMsg('Please enter a valid 10-digit phone number.');
             return;
@@ -632,13 +631,12 @@ const Careers: React.FC = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div>
                                             <label htmlFor="career-phone" className={labelClasses}>
-                                                Phone <span className="text-amber-500">*</span>
+                                                Phone
                                             </label>
                                             <input
                                                 type="tel"
                                                 id="career-phone"
                                                 name="phone"
-                                                required
                                                 autoComplete="tel"
                                                 inputMode="numeric"
                                                 value={formData.phone}
