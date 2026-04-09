@@ -314,6 +314,10 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     </label>
                 </div>
 
+                <p className={`text-gray-500 font-body normal-case ${isHero ? 'text-[10px] leading-snug' : 'text-xs leading-relaxed'}`}>
+                    By submitting this form, you confirm you are at least 18 years old.
+                </p>
+
                 {errorMsg && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm font-body normal-case">
                         {errorMsg}

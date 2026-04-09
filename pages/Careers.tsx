@@ -744,6 +744,10 @@ const Careers: React.FC = () => {
                                         style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0 }}
                                     />
 
+                                    <p className="text-xs text-gray-500 font-body normal-case leading-relaxed">
+                                        By submitting this form, you confirm you are at least 18 years old.
+                                    </p>
+
                                     {/* Error */}
                                     {errorMsg && (
                                         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm font-body normal-case">
