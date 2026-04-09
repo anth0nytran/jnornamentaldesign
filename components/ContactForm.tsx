@@ -18,6 +18,7 @@ interface ContactFormData {
     service: string;
     message: string;
     website: string;
+    smsConsent: boolean;
 }
 
 const validateContactData = (data: ContactFormData): string | null => {
@@ -57,6 +58,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
         service: '',
         message: '',
         website: '',
+        smsConsent: false,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -92,7 +94,11 @@ const ContactForm: React.FC<ContactFormProps> = ({
             const res = await fetch('/api/quote', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...normalizedData, _formLoadedAt: formLoadedAt.current }),
+                body: JSON.stringify({
+                    ...normalizedData,
+                    _formLoadedAt: formLoadedAt.current,
+                    _smsConsentSource: window.location.href,
+                }),
             });
 
             if (!res.ok) {
@@ -303,6 +309,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
                         type="checkbox"
                         id="smsConsent"
                         name="smsConsent"
+                        checked={formData.smsConsent}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, smsConsent: e.target.checked }))}
                         className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
                     />
                     <label htmlFor="smsConsent" className={`text-gray-500 font-body normal-case cursor-pointer ${isHero ? 'text-[10px] leading-snug' : 'text-xs leading-relaxed'}`}>

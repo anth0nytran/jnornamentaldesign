@@ -50,32 +50,42 @@ const Terms: React.FC = () => {
             <div>
               <h2 className="text-2xl font-display font-bold text-iron-900 mb-4">3. SMS/Text Messaging Terms</h2>
               <div className="bg-amber-50 border-l-4 border-amber-500 p-6 space-y-4">
-                <p className="font-semibold text-iron-900">
-                  {BUSINESS_INFO.name} SMS Messaging Program
+                <p>
+                  <strong>Program Name:</strong> {BUSINESS_INFO.name} SMS Program
                 </p>
-                <ol className="list-decimal pl-6 space-y-3">
-                  <li>
-                    By opting in to SMS messages from {BUSINESS_INFO.name}, you may receive notifications related to appointment reminders, project updates, estimates, and occasional promotional messages about our fencing, gates, railings, and access control services.
-                  </li>
-                  <li>
-                    You can cancel the SMS service at any time. Simply text "<strong>STOP</strong>" to the shortcode. Upon sending "STOP," we will confirm your unsubscribe status via SMS. Following this confirmation, you will no longer receive SMS messages from us. To rejoin, sign up as you did initially, and we will resume sending SMS messages to you.
-                  </li>
-                  <li>
-                    If you experience issues with the messaging program, reply with the keyword <strong>HELP</strong> for more assistance, or reach out directly to{' '}
-                    <a href={`mailto:${BUSINESS_INFO.email}`} className="text-amber-600 underline hover:text-amber-500">{BUSINESS_INFO.email}</a>{' '}
-                    or call <a href={`tel:${BUSINESS_INFO.phone}`} className="text-amber-600 underline hover:text-amber-500">{BUSINESS_INFO.phone}</a>.
-                  </li>
-                  <li>
-                    Carriers are not liable for delayed or undelivered messages.
-                  </li>
-                  <li>
-                    As always, message and data rates may apply for messages sent to you from us and to us from you. Message frequency varies. For questions about your text plan or data plan, contact your wireless provider.
-                  </li>
-                  <li>
-                    For privacy-related inquiries, please refer to our privacy policy:{' '}
-                    <Link to="/privacy" className="text-amber-600 underline hover:text-amber-500">Privacy Policy</Link>.
-                  </li>
-                </ol>
+
+                <p>
+                  <strong>Program Description:</strong> When you submit a contact or quote request form on our website and opt in to SMS by checking the consent checkbox, you may receive the following types of text messages:
+                </p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Lead submission confirmations</li>
+                  <li>Appointment coordination and follow-ups</li>
+                  <li>Missed call text-back notifications</li>
+                  <li>Review requests after a completed service</li>
+                  <li>After-hours auto-reply messages</li>
+                </ul>
+
+                <p>
+                  You can cancel the SMS service at any time. Simply text <strong>"STOP"</strong> to the number you received messages from. Upon sending "STOP," we will confirm your unsubscribe status via SMS. Following this confirmation, you will no longer receive SMS messages from us. To rejoin, sign up as you did initially, and we will resume sending SMS messages to you.
+                </p>
+
+                <p>
+                  If you experience issues with the messaging program, reply with the keyword <strong>HELP</strong> for more assistance, or reach out directly to{' '}
+                  <a href={`mailto:${BUSINESS_INFO.email}`} className="text-amber-600 underline hover:text-amber-500">{BUSINESS_INFO.email}</a>.
+                </p>
+
+                <p>
+                  Carriers are not liable for delayed or undelivered messages.
+                </p>
+
+                <p>
+                  As always, message and data rates may apply for messages sent to you from us and to us from you. Message frequency varies. For questions about your text plan or data plan, contact your wireless provider.
+                </p>
+
+                <p>
+                  For privacy-related inquiries, please refer to our{' '}
+                  <Link to="/privacy" className="text-amber-600 underline hover:text-amber-500">Privacy Policy</Link>.
+                </p>
               </div>
             </div>
 

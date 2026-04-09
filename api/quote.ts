@@ -75,13 +75,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const service = normalizeText(body.service);
     const message = normalizeText(body.message);
     const website = normalizeText(body.website);
+    const smsConsent = body.smsConsent === true;
+    const smsConsentSource = normalizeText(body._smsConsentSource);
     const parsedFormLoadedAt = Number(body._formLoadedAt);
     const formLoadedAt = Number.isFinite(parsedFormLoadedAt) ? parsedFormLoadedAt : undefined;
     const fullName = buildFullName(firstName, lastName);
 
-    if (!firstName || !lastName || !phone || !email || !service) {
+    if (!firstName || !lastName || !email || !service) {
       return res.status(400).json({
-        error: 'First name, last name, phone, email, and service are required.',
+        error: 'First name, last name, email, and service are required.',
       });
     }
 
@@ -118,8 +120,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       to: [quoteEmail],
       reply_to: email,
       subject: `New Quote Request | ${fullName} | ${service}`,
-      html: buildQuoteEmail({ name: fullName, phone, email, service, message }),
-      text: buildQuoteText({ name: fullName, phone, email, service, message }),
+      html: buildQuoteEmail({ name: fullName, phone, email, service, message, smsConsent }),
+      text: buildQuoteText({ name: fullName, phone, email, service, message, smsConsent }),
     };
 
     const resendResponse = await fetch('https://api.resend.com/emails', {
@@ -162,8 +164,9 @@ function buildQuoteText(data: {
   email: string;
   service: string;
   message?: string;
+  smsConsent?: boolean;
 }) {
-  const { name, phone, email, service, message } = data;
+  const { name, phone, email, service, message, smsConsent } = data;
 
   // Get Houston time for the timestamp
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -186,6 +189,7 @@ function buildQuoteText(data: {
     `Email: ${email}`,
     `Service: ${service}`,
     `Message: ${message || '(none)'}`,
+    `SMS Consent: ${smsConsent ? 'Yes' : 'No'}`,
     '',
     '--------------------------------------------------',
     'Powered by QuickLaunchWeb',
@@ -200,8 +204,9 @@ function buildQuoteEmail(data: {
   email?: string;
   service: string;
   message?: string;
+  smsConsent?: boolean;
 }) {
-  const { name, phone, email, service, message } = data;
+  const { name, phone, email, service, message, smsConsent } = data;
 
   // Get Houston time for the timestamp
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -338,8 +343,11 @@ function buildQuoteEmail(data: {
                         <strong style="color:#ffffff;">Email:</strong> <a href="mailto:${email}" style="color:#a1a1aa;text-decoration:none;">${email}</a>
                       </p>
                       ` : ''}
-                      <p style="margin:0;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                      <p style="margin:0 0 8px;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
                         <strong style="color:#ffffff;">Received:</strong> ${timestamp}
+                      </p>
+                      <p style="margin:0;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                        <strong style="color:#ffffff;">SMS Consent:</strong> <span style="color:${smsConsent ? '#22c55e' : '#ef4444'};">${smsConsent ? 'Yes' : 'No'}</span>
                       </p>
                    </td>
                 </tr>

@@ -66,15 +66,47 @@ const Privacy: React.FC = () => {
 
             <div>
               <h2 className="text-2xl font-display font-bold text-iron-900 mb-4">4. SMS/Text Messaging</h2>
-              <p>
-                If you opt in to receive SMS/text messages from {BUSINESS_INFO.name}, you consent to receive notifications, alerts, and occasional marketing messages. Message frequency may vary. Message and data rates may apply.
-              </p>
-              <ul className="list-disc pl-6 mt-3 space-y-2">
-                <li>Text <strong>HELP</strong> for assistance.</li>
-                <li>Text <strong>STOP</strong> to unsubscribe at any time.</li>
-              </ul>
+
               <p className="mt-3">
-                You may opt out of receiving text messages at any time by replying STOP. Upon sending STOP, we will confirm your unsubscribe status via SMS. Following this confirmation, you will no longer receive SMS messages from us.
+                <strong>Message Types:</strong> All SMS messages sent through our website are transactional and informational only. Messages include lead submission confirmations, missed call text-backs, appointment follow-ups, after-hours auto-replies, and one-time review requests after completed services.
+              </p>
+
+              <p className="mt-3">
+                <strong>How You Opt In:</strong> Our website includes a contact/quote form with a phone number field and an unchecked SMS consent checkbox (not pre-checked). You must actively check the box to opt in. The checkbox reads:
+              </p>
+              <p className="mt-2 pl-4 border-l-4 border-amber-500 italic text-gray-500">
+                "I consent to receive SMS notifications, alerts &amp; occasional marketing messages from {BUSINESS_INFO.name}. Message frequency may vary. Msg &amp; data rates may apply. Text HELP for help. Reply STOP to unsubscribe. Privacy Policy &amp; Terms."
+              </p>
+              <p className="mt-3">
+                Consent is voluntary and not required to submit the form or receive service. We capture and store proof of opt-in including timestamp, source page URL, phone number, and checkbox state.
+              </p>
+
+              <p className="mt-3">
+                <strong>Message Frequency:</strong> Message frequency varies based on activity. Typically 1–5 messages per customer interaction.
+              </p>
+
+              <p className="mt-3">
+                <strong>Message and Data Rates:</strong> Standard message and data rates from your mobile carrier may apply. We are not responsible for carrier charges. Major US carriers are supported including AT&amp;T, T-Mobile, Verizon, and Sprint.
+              </p>
+
+              <p className="mt-3">
+                <strong>Opt-Out:</strong> Reply <strong>STOP</strong> to any message to immediately unsubscribe. You will receive a one-time confirmation and no further messages will be sent. To re-subscribe, reply <strong>START</strong>.
+              </p>
+
+              <p className="mt-3">
+                <strong>Help:</strong> Reply <strong>HELP</strong> to any message for assistance, or email {BUSINESS_INFO.email}.
+              </p>
+
+              <p className="mt-3">
+                <strong>SMS Data and Privacy:</strong> We do not sell, rent, or share your mobile phone number or SMS consent data with any third parties for their marketing purposes. SMS consent and opt-in data is used solely for sending the transactional messages described in this section. Opt-in records (timestamp, source URL, phone number, consent state) are retained for compliance purposes.
+              </p>
+
+              <p className="mt-3 font-semibold text-iron-900 bg-amber-50 border-l-4 border-amber-500 p-4">
+                All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties, excluding aggregators and providers of the Text Message services.
+              </p>
+
+              <p className="mt-3">
+                Carriers are not liable for delayed or undelivered messages.
               </p>
             </div>
 
