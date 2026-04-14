@@ -19,6 +19,7 @@ interface ContactFormData {
     message: string;
     website: string;
     smsConsent: boolean;
+    ageConsent: boolean;
 }
 
 const validateContactData = (data: ContactFormData): string | null => {
@@ -42,6 +43,10 @@ const validateContactData = (data: ContactFormData): string | null => {
         return 'Please enter a valid email address.';
     }
 
+    if (!data.ageConsent) {
+        return 'You must confirm you are at least 18 years old to submit this form.';
+    }
+
     return null;
 };
 
@@ -59,6 +64,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
         message: '',
         website: '',
         smsConsent: false,
+        ageConsent: false,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -322,9 +328,20 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     </label>
                 </div>
 
-                <p className={`text-gray-500 font-body normal-case ${isHero ? 'text-[10px] leading-snug' : 'text-xs leading-relaxed'}`}>
-                    By submitting this form, you confirm you are at least 18 years old.
-                </p>
+                <div className={`flex items-start ${isHero ? 'gap-2' : 'gap-3'}`}>
+                    <input
+                        type="checkbox"
+                        id="ageConsent"
+                        name="ageConsent"
+                        required
+                        checked={formData.ageConsent}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, ageConsent: e.target.checked }))}
+                        className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
+                    />
+                    <label htmlFor="ageConsent" className={`text-gray-500 font-body normal-case cursor-pointer ${isHero ? 'text-[10px] leading-snug' : 'text-xs leading-relaxed'}`}>
+                        I confirm I am at least 18 years old.
+                    </label>
+                </div>
 
                 {errorMsg && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm font-body normal-case">
