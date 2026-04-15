@@ -11,32 +11,41 @@ interface ContactFormProps {
 }
 
 interface ContactFormData {
-    firstName: string;
-    lastName: string;
+    fullName: string;
     phone: string;
     email: string;
+    address: string;
     service: string;
-    message: string;
+    timeline: string;
+    projectDetails: string;
     website: string;
     smsConsent: boolean;
     ageConsent: boolean;
 }
 
+const TIMELINE_OPTIONS = [
+    'ASAP / Within 2 weeks',
+    '2-4 weeks',
+    '1-3 months',
+    '3+ months',
+    'Just planning / Flexible',
+];
+
 const validateContactData = (data: ContactFormData): string | null => {
-    if (!data.firstName || !data.lastName || !data.email || !data.service) {
-        return 'First name, last name, email, and service are required.';
+    if (!data.fullName || !data.email || !data.address || !data.service || !data.timeline) {
+        return 'Please fill out all required fields.';
     }
 
-    if (!isValidName(data.firstName)) {
-        return 'Enter a valid first name (letters, spaces, hyphens, apostrophes).';
-    }
-
-    if (!isValidName(data.lastName)) {
-        return 'Enter a valid last name (letters, spaces, hyphens, apostrophes).';
+    if (!isValidName(data.fullName)) {
+        return 'Enter a valid full name (letters, spaces, hyphens, apostrophes).';
     }
 
     if (data.phone && !isValidPhone(data.phone)) {
         return 'Please enter a valid 10-digit phone number.';
+    }
+
+    if (data.smsConsent && !isValidPhone(data.phone)) {
+        return 'A valid phone number is required to receive SMS messages.';
     }
 
     if (!isValidEmail(data.email)) {
@@ -56,12 +65,13 @@ const ContactForm: React.FC<ContactFormProps> = ({
     subtitle = "Fill out the form and we'll get back to you within 24 hours.",
 }) => {
     const [formData, setFormData] = useState<ContactFormData>({
-        firstName: '',
-        lastName: '',
+        fullName: '',
         phone: '',
         email: '',
+        address: '',
         service: '',
-        message: '',
+        timeline: '',
+        projectDetails: '',
         website: '',
         smsConsent: false,
         ageConsent: false,
@@ -77,12 +87,13 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
         const normalizedData: ContactFormData = {
             ...formData,
-            firstName: normalizeName(formData.firstName),
-            lastName: normalizeName(formData.lastName),
+            fullName: normalizeName(formData.fullName),
             phone: formatPhoneInput(formData.phone),
             email: normalizeEmail(formData.email),
+            address: formData.address.trim(),
             service: formData.service.trim(),
-            message: formData.message.trim(),
+            timeline: formData.timeline.trim(),
+            projectDetails: formData.projectDetails.trim(),
         };
 
         const validationError = validateContactData(normalizedData);
@@ -101,7 +112,16 @@ const ContactForm: React.FC<ContactFormProps> = ({
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    ...normalizedData,
+                    fullName: normalizedData.fullName,
+                    phone: normalizedData.phone,
+                    email: normalizedData.email,
+                    address: normalizedData.address,
+                    service: normalizedData.service,
+                    timeline: normalizedData.timeline,
+                    message: normalizedData.projectDetails,
+                    website: normalizedData.website,
+                    smsConsent: normalizedData.smsConsent,
+                    ageConsent: normalizedData.ageConsent,
                     _formLoadedAt: formLoadedAt.current,
                     _smsConsentSource: window.location.href,
                 }),
@@ -131,8 +151,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
                 return { ...prev, phone: formatPhoneInput(value) };
             }
 
-            if (name === 'firstName' || name === 'lastName') {
-                return { ...prev, [name]: value.replace(/[^A-Za-z' -]/g, '').slice(0, 50) };
+            if (name === 'fullName') {
+                return { ...prev, fullName: value.replace(/[^A-Za-z' -]/g, '').slice(0, 80) };
             }
 
             if (name === 'email') {
@@ -173,6 +193,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
     const labelClasses = `block font-display font-bold text-iron-900 uppercase tracking-wider ${isHero ? 'text-xs mb-1.5' : 'text-sm mb-2'}`;
 
+    const requiredMark = <span className="text-amber-500">*</span>;
+
     return (
         <div>
             {variant !== 'hero' && (
@@ -185,47 +207,28 @@ const ContactForm: React.FC<ContactFormProps> = ({
             )}
 
             <form onSubmit={handleSubmit} className={isHero ? 'space-y-3' : 'space-y-4'} noValidate>
-                <div className={`grid grid-cols-1 md:grid-cols-2 ${isHero ? 'gap-3' : 'gap-4'}`}>
-                    <div>
-                        <label htmlFor="firstName" className={labelClasses}>
-                            First Name <span className="text-amber-500">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="firstName"
-                            name="firstName"
-                            required
-                            autoComplete="given-name"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            className={inputClasses}
-                            placeholder="John"
-                            maxLength={50}
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="lastName" className={labelClasses}>
-                            Last Name <span className="text-amber-500">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="lastName"
-                            name="lastName"
-                            required
-                            autoComplete="family-name"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                            className={inputClasses}
-                            placeholder="Doe"
-                            maxLength={50}
-                        />
-                    </div>
+                <div>
+                    <label htmlFor="fullName" className={labelClasses}>
+                        Full Name {requiredMark}
+                    </label>
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        required
+                        autoComplete="name"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        className={inputClasses}
+                        placeholder="John Doe"
+                        maxLength={80}
+                    />
                 </div>
 
                 <div className={`grid grid-cols-1 md:grid-cols-2 ${isHero ? 'gap-3' : 'gap-4'}`}>
                     <div>
                         <label htmlFor="phone" className={labelClasses}>
-                            Phone
+                            Phone Number
                         </label>
                         <input
                             type="tel"
@@ -242,7 +245,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     </div>
                     <div>
                         <label htmlFor="email" className={labelClasses}>
-                            Email <span className="text-amber-500">*</span>
+                            Email {requiredMark}
                         </label>
                         <input
                             type="email"
@@ -259,40 +262,80 @@ const ContactForm: React.FC<ContactFormProps> = ({
                 </div>
 
                 <div>
-                    <label htmlFor="service" className={labelClasses}>
-                        Service <span className="text-amber-500">*</span>
+                    <label htmlFor="address" className={labelClasses}>
+                        Project Address {requiredMark}
                     </label>
-                    <select
-                        id="service"
-                        name="service"
+                    <input
+                        type="text"
+                        id="address"
+                        name="address"
                         required
-                        value={formData.service}
+                        autoComplete="street-address"
+                        value={formData.address}
                         onChange={handleChange}
                         className={inputClasses}
-                    >
-                        <option value="">Select...</option>
-                        {SERVICE_CATEGORIES.map((cat) => (
-                            <optgroup key={cat.slug} label={cat.title}>
-                                {cat.services.map((service) => (
-                                    <option key={service.title} value={service.title}>
-                                        {service.title}
-                                    </option>
-                                ))}
-                            </optgroup>
-                        ))}
-                        <option value="Other">Other</option>
-                    </select>
+                        placeholder="123 Main St, Houston, TX"
+                        maxLength={150}
+                    />
+                </div>
+
+                <div className={`grid grid-cols-1 md:grid-cols-2 ${isHero ? 'gap-3' : 'gap-4'}`}>
+                    <div>
+                        <label htmlFor="service" className={labelClasses}>
+                            Service {requiredMark}
+                        </label>
+                        <select
+                            id="service"
+                            name="service"
+                            required
+                            value={formData.service}
+                            onChange={handleChange}
+                            className={inputClasses}
+                        >
+                            <option value="">Select...</option>
+                            {SERVICE_CATEGORIES.map((cat) => (
+                                <optgroup key={cat.slug} label={cat.title}>
+                                    {cat.services.map((service) => (
+                                        <option key={service.title} value={service.title}>
+                                            {service.title}
+                                        </option>
+                                    ))}
+                                </optgroup>
+                            ))}
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="timeline" className={labelClasses}>
+                            Timeline {requiredMark}
+                        </label>
+                        <select
+                            id="timeline"
+                            name="timeline"
+                            required
+                            value={formData.timeline}
+                            onChange={handleChange}
+                            className={inputClasses}
+                        >
+                            <option value="">Select...</option>
+                            {TIMELINE_OPTIONS.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
                 <div>
-                    <label htmlFor="message" className={labelClasses}>
+                    <label htmlFor="projectDetails" className={labelClasses}>
                         Project Details (Optional)
                     </label>
                     <textarea
-                        id="message"
-                        name="message"
+                        id="projectDetails"
+                        name="projectDetails"
                         rows={isHero ? 2 : 4}
-                        value={formData.message}
+                        value={formData.projectDetails}
                         onChange={handleChange}
                         className={inputClasses}
                         placeholder="Tell us about your project..."
@@ -310,37 +353,42 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0 }}
                 />
 
-                <div className={`flex items-start ${isHero ? 'gap-2' : 'gap-3'}`}>
-                    <input
-                        type="checkbox"
-                        id="smsConsent"
-                        name="smsConsent"
-                        checked={formData.smsConsent}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, smsConsent: e.target.checked }))}
-                        className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
-                    />
-                    <label htmlFor="smsConsent" className={`text-gray-500 font-body normal-case cursor-pointer ${isHero ? 'text-[10px] leading-snug' : 'text-xs leading-relaxed'}`}>
-                        I consent to receive SMS notifications, alerts &amp; occasional marketing messages from{' '}
-                        <strong className="text-iron-900">{BUSINESS_INFO.name}</strong>. Message frequency may vary. Msg &amp; data rates may apply.
-                        Text HELP for help. Reply STOP to unsubscribe.{' '}
-                        <Link to="/privacy" className="text-amber-600 underline hover:text-amber-500">Privacy Policy</Link> &amp;{' '}
-                        <Link to="/terms" className="text-amber-600 underline hover:text-amber-500">Terms</Link>.
-                    </label>
-                </div>
+                <div className="border-2 border-gray-300 rounded-md p-3 bg-gray-50">
+                    <p className={`font-display font-bold text-iron-900 uppercase tracking-wider mb-2 ${isHero ? 'text-xs' : 'text-sm'}`}>
+                        SMS Communications from {BUSINESS_INFO.name}
+                    </p>
+                    <div className={`flex items-start ${isHero ? 'gap-2' : 'gap-3'}`}>
+                        <input
+                            type="checkbox"
+                            id="smsConsent"
+                            name="smsConsent"
+                            checked={formData.smsConsent}
+                            onChange={(e) => setFormData((prev) => ({ ...prev, smsConsent: e.target.checked }))}
+                            className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
+                        />
+                        <label htmlFor="smsConsent" className={`text-iron-900 font-body normal-case cursor-pointer ${isHero ? 'text-[11px] leading-snug' : 'text-xs leading-relaxed'}`}>
+                            I agree to receive SMS notifications, alerts &amp; occasional marketing messages from{' '}
+                            <strong>{BUSINESS_INFO.name}</strong>, sent via QuickLaunchWeb on their behalf. Message frequency may vary.
+                            Msg &amp; data rates may apply. Text HELP for help. Reply STOP to unsubscribe.{' '}
+                            <Link to="/privacy" className="text-amber-600 underline hover:text-amber-500">Privacy Policy</Link> &amp;{' '}
+                            <Link to="/terms" className="text-amber-600 underline hover:text-amber-500">Terms</Link>.
+                        </label>
+                    </div>
 
-                <div className={`flex items-start ${isHero ? 'gap-2' : 'gap-3'}`}>
-                    <input
-                        type="checkbox"
-                        id="ageConsent"
-                        name="ageConsent"
-                        required
-                        checked={formData.ageConsent}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, ageConsent: e.target.checked }))}
-                        className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
-                    />
-                    <label htmlFor="ageConsent" className={`text-gray-500 font-body normal-case cursor-pointer ${isHero ? 'text-[10px] leading-snug' : 'text-xs leading-relaxed'}`}>
-                        I confirm I am at least 18 years old.
-                    </label>
+                    <div className={`flex items-start border-t border-gray-200 pt-3 mt-3 ${isHero ? 'gap-2' : 'gap-3'}`}>
+                        <input
+                            type="checkbox"
+                            id="ageConsent"
+                            name="ageConsent"
+                            required
+                            checked={formData.ageConsent}
+                            onChange={(e) => setFormData((prev) => ({ ...prev, ageConsent: e.target.checked }))}
+                            className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
+                        />
+                        <label htmlFor="ageConsent" className={`text-iron-900 font-body normal-case cursor-pointer ${isHero ? 'text-[11px] leading-snug' : 'text-xs leading-relaxed'}`}>
+                            I confirm I am at least 18 years old. {requiredMark}
+                        </label>
+                    </div>
                 </div>
 
                 {errorMsg && (

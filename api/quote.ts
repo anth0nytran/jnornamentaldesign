@@ -66,13 +66,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const body = (req.body ?? {}) as Record<string, unknown>;
-    const splitLegacy = splitFullName(normalizeText(body.name));
 
-    const firstName = normalizeName(normalizeText(body.firstName) || splitLegacy.firstName);
-    const lastName = normalizeName(normalizeText(body.lastName) || splitLegacy.lastName);
+    const fullNameInput =
+      normalizeText(body.fullName) ||
+      normalizeText(body.name) ||
+      buildFullName(normalizeText(body.firstName), normalizeText(body.lastName));
+    const fullName = normalizeName(fullNameInput);
+    const { firstName, lastName } = splitFullName(fullName);
     const phone = formatPhoneInput(normalizeText(body.phone));
     const email = normalizeEmail(normalizeText(body.email));
+    const address = normalizeText(body.address);
     const service = normalizeText(body.service);
+    const timeline = normalizeText(body.timeline);
     const message = normalizeText(body.message);
     const website = normalizeText(body.website);
     const smsConsent = body.smsConsent === true;
@@ -80,20 +85,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const smsConsentSource = normalizeText(body._smsConsentSource);
     const parsedFormLoadedAt = Number(body._formLoadedAt);
     const formLoadedAt = Number.isFinite(parsedFormLoadedAt) ? parsedFormLoadedAt : undefined;
-    const fullName = buildFullName(firstName, lastName);
 
-    if (!firstName || !lastName || !email || !service) {
+    if (!fullName || !email || !address || !service || !timeline) {
       return res.status(400).json({
-        error: 'First name, last name, email, and service are required.',
+        error: 'Name, email, address, service, and timeline are required.',
       });
     }
 
-    if (!isValidName(firstName) || !isValidName(lastName)) {
-      return res.status(400).json({ error: 'Invalid first name or last name.' });
+    if (!isValidName(fullName)) {
+      return res.status(400).json({ error: 'Please enter a valid full name.' });
     }
 
-    if (!isValidPhone(phone)) {
+    if (phone && !isValidPhone(phone)) {
       return res.status(400).json({ error: 'Please enter a valid 10-digit phone number.' });
+    }
+
+    if (smsConsent && !isValidPhone(phone)) {
+      return res.status(400).json({
+        error: 'A valid phone number is required to receive SMS messages.',
+      });
     }
 
     if (!isValidEmail(email)) {
@@ -127,8 +137,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       to: [quoteEmail],
       reply_to: email,
       subject: `New Quote Request | ${fullName} | ${service}`,
-      html: buildQuoteEmail({ name: fullName, phone, email, service, message, smsConsent, ageConsent }),
-      text: buildQuoteText({ name: fullName, phone, email, service, message, smsConsent, ageConsent }),
+      html: buildQuoteEmail({ name: fullName, phone, email, address, service, timeline, message, smsConsent, ageConsent }),
+      text: buildQuoteText({ name: fullName, phone, email, address, service, timeline, message, smsConsent, ageConsent }),
     };
 
     const resendResponse = await fetch('https://api.resend.com/emails', {
@@ -169,12 +179,14 @@ function buildQuoteText(data: {
   name: string;
   phone: string;
   email: string;
+  address: string;
   service: string;
+  timeline: string;
   message?: string;
   smsConsent?: boolean;
   ageConsent?: boolean;
 }) {
-  const { name, phone, email, service, message, smsConsent, ageConsent } = data;
+  const { name, phone, email, address, service, timeline, message, smsConsent, ageConsent } = data;
 
   // Get Houston time for the timestamp
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -193,9 +205,11 @@ function buildQuoteText(data: {
     `Received: ${timestamp}`,
     '',
     `Name: ${name}`,
-    `Phone: ${phone}`,
+    `Phone: ${phone || '(not provided)'}`,
     `Email: ${email}`,
+    `Address: ${address}`,
     `Service: ${service}`,
+    `Timeline: ${timeline}`,
     `Message: ${message || '(none)'}`,
     `SMS Consent: ${smsConsent ? 'Yes' : 'No'}`,
     `Age 18+ Confirmed: ${ageConsent ? 'Yes' : 'No'}`,
@@ -211,12 +225,14 @@ function buildQuoteEmail(data: {
   name: string;
   phone: string;
   email?: string;
+  address: string;
   service: string;
+  timeline: string;
   message?: string;
   smsConsent?: boolean;
   ageConsent?: boolean;
 }) {
-  const { name, phone, email, service, message, smsConsent, ageConsent } = data;
+  const { name, phone, email, address, service, timeline, message, smsConsent, ageConsent } = data;
 
   // Get Houston time for the timestamp
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -277,9 +293,15 @@ function buildQuoteEmail(data: {
                 <!-- CALL BUTTON -->
                 <tr>
                   <td align="center">
+                    ${phone ? `
                     <a href="tel:${phone}" style="display:block;width:100%;background-color:#f59e0b;color:#09090b;font-size:14px;font-weight:800;text-decoration:none;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;box-sizing:border-box;">
                       Call Now
                     </a>
+                    ` : `
+                    <div style="display:block;width:100%;background-color:#27272a;color:#52525b;font-size:14px;font-weight:800;padding:16px 24px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;border:1px solid #3f3f46;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;box-sizing:border-box;">
+                      No Phone
+                    </div>
+                    `}
                   </td>
                 </tr>
 
@@ -323,6 +345,22 @@ function buildQuoteEmail(data: {
                   </td>
                 </tr>
 
+                <!-- TIMELINE ROW -->
+                <tr>
+                  <td style="padding:16px 24px 0;">
+                    <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#71717a;text-transform:uppercase;letter-spacing:1px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">Timeline</p>
+                    <p style="margin:0;font-size:15px;color:#ffffff;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">${timeline}</p>
+                  </td>
+                </tr>
+
+                <!-- ADDRESS ROW -->
+                <tr>
+                  <td style="padding:16px 24px 0;">
+                    <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#71717a;text-transform:uppercase;letter-spacing:1px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">Project Address</p>
+                    <p style="margin:0;font-size:15px;color:#ffffff;font-weight:500;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">${address}</p>
+                  </td>
+                </tr>
+
                 <!-- DIVIDER -->
                 <tr>
                   <td style="padding:24px;">
@@ -346,7 +384,7 @@ function buildQuoteEmail(data: {
                       <div style="height:1px;background-color:#3f3f46;margin-bottom:24px;"></div>
                       
                       <p style="margin:0 0 8px;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
-                        <strong style="color:#ffffff;">Phone:</strong> <a href="tel:${phone}" style="color:#a1a1aa;text-decoration:none;">${phone}</a>
+                        <strong style="color:#ffffff;">Phone:</strong> ${phone ? `<a href="tel:${phone}" style="color:#a1a1aa;text-decoration:none;">${phone}</a>` : '<span style="color:#71717a;">Not provided</span>'}
                       </p>
                       ${email ? `
                       <p style="margin:0 0 8px;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
