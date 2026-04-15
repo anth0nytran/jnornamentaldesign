@@ -154,6 +154,43 @@
 
 <body class="bg-white">
   <div id="root"></div>
+
+  <!--
+    Static A2P/SMS opt-in disclosures mirrored here so Twilio's A2P reviewer
+    (which does not execute JavaScript) can read the consent language,
+    business name, and age restriction in the raw HTML of the opt-in URL.
+    The live, interactive form is rendered by React in #root above.
+  -->
+  <div id="a2p-static-disclosures" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+    <h2>Contact / Quote Request Form &mdash; SMS Opt-In Disclosures</h2>
+    <form>
+      <label for="a2p-phone">Phone (optional, not required to submit)</label>
+      <input type="tel" id="a2p-phone" name="phone" />
+
+      <label>
+        <input type="checkbox" name="smsConsent" />
+        I consent to receive SMS notifications, alerts &amp; occasional marketing messages from <strong>JN Ornamental Design LLC</strong>. Message frequency may vary. Msg &amp; data rates may apply. Text HELP for help. Reply STOP to unsubscribe. <a href="/privacy">Privacy Policy</a> &amp; <a href="/terms">Terms</a>.
+      </label>
+
+      <label>
+        <input type="checkbox" name="ageConsent" required />
+        I confirm I am at least 18 years old.
+      </label>
+
+      <button type="submit">Request Free Estimate</button>
+    </form>
+    <p>The SMS consent checkbox above is not pre-checked. The age confirmation checkbox is required &mdash; the form cannot be submitted unless the user confirms they are at least 18 years old. Submitted by JN Ornamental Design LLC.</p>
+  </div>
+
+  <noscript>
+    <div>
+      <h2>JN Ornamental Design LLC &mdash; SMS Opt-In Disclosure</h2>
+      <p>I consent to receive SMS notifications, alerts &amp; occasional marketing messages from JN Ornamental Design LLC. Message frequency may vary. Msg &amp; data rates may apply. Text HELP for help. Reply STOP to unsubscribe.</p>
+      <p>I confirm I am at least 18 years old.</p>
+      <p>See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.</p>
+    </div>
+  </noscript>
+
   <script type="module" src="/index.tsx"></script>
 </body>
 
