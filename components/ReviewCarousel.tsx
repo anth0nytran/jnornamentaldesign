@@ -289,7 +289,7 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
                         __html: JSON.stringify({
                             '@context': 'https://schema.org',
                             '@type': 'LocalBusiness',
-                            name: 'JN Ornamental Design LLC',
+                            name: 'J.N Ornamental Design LLC',
                             aggregateRating: {
                                 '@type': 'AggregateRating',
                                 ratingValue: '4.9',

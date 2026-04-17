@@ -367,11 +367,13 @@ const ContactForm: React.FC<ContactFormProps> = ({
                             className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
                         />
                         <label htmlFor="smsConsent" className={`text-iron-900 font-body normal-case cursor-pointer ${isHero ? 'text-[11px] leading-snug' : 'text-xs leading-relaxed'}`}>
-                            I agree to receive SMS notifications, alerts &amp; occasional marketing messages from{' '}
-                            <strong>{BUSINESS_INFO.name}</strong>, sent via QuickLaunchWeb on their behalf. Message frequency may vary.
-                            Msg &amp; data rates may apply. Text HELP for help. Reply STOP to unsubscribe.{' '}
+                            I consent to receive SMS appointment reminders, quote follow-ups, project updates &amp; occasional marketing messages from{' '}
+                            <strong>{BUSINESS_INFO.name}</strong>, sent via QuickLaunchWeb on their behalf. Message frequency may vary
+                            (approximately 2-6 messages per month). Message &amp; data rates may apply. Text HELP for assistance.
+                            You may reply STOP to unsubscribe at any time. Your information will not be shared with third parties.
+                            See our{' '}
                             <Link to="/privacy" className="text-amber-600 underline hover:text-amber-500">Privacy Policy</Link> &amp;{' '}
-                            <Link to="/terms" className="text-amber-600 underline hover:text-amber-500">Terms</Link>.
+                            <Link to="/terms" className="text-amber-600 underline hover:text-amber-500">Terms of Service</Link>.
                         </label>
                     </div>
 

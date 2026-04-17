@@ -13,7 +13,7 @@ import gatesHeroCustom from './assets/gallery/IMG_8283.png';
 import railingsHeroCustom from './assets/gallery/IMG_4194.png';
 
 export const BUSINESS_INFO: BusinessInfo = {
-  name: 'JN Ornamental Design LLC',
+  name: 'J.N Ornamental Design LLC',
   shortName: 'JN Ornamental',
   tagline: 'Fencing & Fabrication',
   phone: '(832) 594-6075',
