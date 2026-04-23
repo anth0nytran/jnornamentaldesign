@@ -75,7 +75,7 @@ const Privacy: React.FC = () => {
                 <strong>How You Opt In:</strong> Our website includes a contact/quote form with a phone number field and an unchecked SMS consent checkbox (not pre-checked). You must actively check the box to opt in. The checkbox reads:
               </p>
               <p className="mt-2 pl-4 border-l-4 border-amber-500 italic text-gray-500">
-                "I consent to receive SMS appointment reminders, quote follow-ups, project updates &amp; occasional marketing messages from {BUSINESS_INFO.name}, sent via QuickLaunchWeb on their behalf. Message frequency may vary (approximately 2-6 messages per month). Message &amp; data rates may apply. Text HELP for assistance. You may reply STOP to unsubscribe at any time. Your information will not be shared with third parties. Privacy Policy &amp; Terms of Service."
+                "I consent to receive SMS appointment reminders, quote follow-ups, project updates &amp; occasional marketing messages from {BUSINESS_INFO.name}. Message frequency may vary (approximately 2-6 messages per month). Message &amp; data rates may apply. Text HELP for assistance. You may reply STOP to unsubscribe at any time. Your information will not be shared with third parties. Privacy Policy &amp; Terms of Service."
               </p>
               <p className="mt-3">
                 Consent is voluntary and not required to submit the form or receive service. We capture and store proof of opt-in including timestamp, source page URL, phone number, and checkbox state.

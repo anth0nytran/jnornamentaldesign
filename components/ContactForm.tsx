@@ -368,7 +368,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
                         />
                         <label htmlFor="smsConsent" className={`text-iron-900 font-body normal-case cursor-pointer ${isHero ? 'text-[11px] leading-snug' : 'text-xs leading-relaxed'}`}>
                             I consent to receive SMS appointment reminders, quote follow-ups, project updates &amp; occasional marketing messages from{' '}
-                            <strong>{BUSINESS_INFO.name}</strong>, sent via QuickLaunchWeb on their behalf. Message frequency may vary
+                            <strong>{BUSINESS_INFO.name}</strong>. Message frequency may vary
                             (approximately 2-6 messages per month). Message &amp; data rates may apply. Text HELP for assistance.
                             You may reply STOP to unsubscribe at any time. Your information will not be shared with third parties.
                             See our{' '}
