@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Review } from '../types';
+import { trackMarketingEvent } from '../utils/analytics';
 import { StarIcon, CheckCircleIcon, GoogleIcon, ArrowRightIcon } from './Icons';
 
 interface ReviewCarouselProps {
@@ -86,7 +87,15 @@ const ReviewCard: React.FC<{ review: Review }> = ({ review }) => {
                 </p>
                 {isLong && (
                     <button
-                        onClick={() => setExpanded(!expanded)}
+                        onClick={() => {
+                            if (!expanded) {
+                                trackMarketingEvent('Review Expanded', {
+                                    label: review.source,
+                                    target: review.project || review.category,
+                                });
+                            }
+                            setExpanded(!expanded);
+                        }}
                         className="text-amber-600 font-display font-bold text-xs uppercase tracking-wider mt-2 hover:text-amber-500 transition-colors"
                     >
                         {expanded ? 'Read Less' : 'Read More'}
@@ -156,8 +165,26 @@ const ReviewCarousel: React.FC<ReviewCarouselProps> = ({
         [reviews, page, cols]
     );
 
-    const prev = useCallback(() => setPage((p) => Math.max(0, p - 1)), []);
-    const next = useCallback(() => setPage((p) => Math.min(totalPages - 1, p + 1)), [totalPages]);
+    const prev = useCallback(() => setPage((p) => {
+        const nextPage = Math.max(0, p - 1);
+        if (nextPage !== p) {
+            trackMarketingEvent('Reviews Carousel Navigated', {
+                label: 'previous',
+                target: `page_${nextPage + 1}`,
+            });
+        }
+        return nextPage;
+    }), []);
+    const next = useCallback(() => setPage((p) => {
+        const nextPage = Math.min(totalPages - 1, p + 1);
+        if (nextPage !== p) {
+            trackMarketingEvent('Reviews Carousel Navigated', {
+                label: 'next',
+                target: `page_${nextPage + 1}`,
+            });
+        }
+        return nextPage;
+    }), [totalPages]);
 
     // Swipe logic
     const [touchStart, setTouchStart] = useState<number | null>(null);

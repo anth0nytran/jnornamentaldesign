@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import MarketingAnalytics from './components/analytics/MarketingAnalytics';
+import VercelInsights from './components/analytics/VercelInsights';
 
 // ── Route-level code splitting ──
 // Each page (and its deps like framer-motion, reviewsData) is only
@@ -22,6 +24,8 @@ const App: React.FC = () => {
   return (
     <Router>
       <ScrollToTop />
+      <MarketingAnalytics />
+      <VercelInsights />
       <div className="min-h-screen flex flex-col font-body antialiased">
         <Header />
         <main className="flex-1">

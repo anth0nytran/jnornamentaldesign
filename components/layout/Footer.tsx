@@ -52,6 +52,8 @@ const Footer: React.FC = () => {
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-analytics-placement="footer_social"
+                    data-analytics-label={platform}
                     className="w-10 h-10 bg-white/5 border border-white/10 hover:border-amber-500 hover:bg-amber-500/10 hover:text-amber-500 text-white/60 flex items-center justify-center transition-all duration-300"
                     aria-label={platform}
                   >
@@ -73,6 +75,8 @@ const Footer: React.FC = () => {
                 <li key={cat.slug}>
                   <Link
                     to={`/${cat.slug}`}
+                    data-analytics-placement="footer_services"
+                    data-analytics-label={cat.title}
                     className="group flex items-center text-white/50 hover:text-amber-500 transition-colors text-sm tracking-wide font-body"
                   >
                     <span className="w-1.5 h-1.5 bg-white/10 group-hover:bg-amber-500 mr-3 transition-colors"></span>
@@ -83,6 +87,7 @@ const Footer: React.FC = () => {
               <li className="pt-4">
                 <Link
                   to="/contact"
+                  data-analytics-placement="footer_quote"
                   className="group inline-flex items-center text-amber-500 hover:text-white transition-colors text-xs font-display font-bold uppercase tracking-widest border-b border-amber-500/30 hover:border-white/30 pb-1"
                 >
                   Get a Free Quote
@@ -116,7 +121,7 @@ const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-6">
               <li>
-                <a href={`tel:${BUSINESS_INFO.phone}`} className="group block">
+                <a href={`tel:${BUSINESS_INFO.phone}`} data-analytics-placement="footer_phone" className="group block">
                   <div className="flex items-center gap-4 mb-2">
                     <div className="p-2 bg-white/5 border border-white/10 group-hover:border-amber-500 transition-colors text-amber-500">
                       <PhoneIcon className="w-4 h-4" />
@@ -129,7 +134,7 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href={`mailto:${BUSINESS_INFO.email}`} className="group block">
+                <a href={`mailto:${BUSINESS_INFO.email}`} data-analytics-placement="footer_email" className="group block">
                   <div className="flex items-center gap-4 mb-2">
                     <div className="p-2 bg-white/5 border border-white/10 group-hover:border-amber-500 transition-colors text-amber-500">
                       <MailIcon className="w-4 h-4" />
@@ -172,6 +177,7 @@ const Footer: React.FC = () => {
                 href="https://quicklaunchweb.us"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics-placement="footer_credit"
                 className="hover:text-amber-500/50 transition-colors"
               >
                 Made by QuickLaunchWeb

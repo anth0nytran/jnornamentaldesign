@@ -67,6 +67,7 @@ const Header: React.FC = () => {
           {/* Right: Phone */}
           <a
             href={`tel:${BUSINESS_INFO.phone}`}
+            data-analytics-placement="header_announcement_bar"
             className="flex items-center gap-2 text-sm font-display font-bold text-black hover:text-black/70 transition-colors"
           >
             <PhoneIcon className="w-4 h-4" />
@@ -126,6 +127,7 @@ const Header: React.FC = () => {
             <div className="hidden lg:block">
               <Link
                 to="/contact#quote"
+                data-analytics-placement="header_desktop_quote"
                 className="bg-amber-500 text-black px-6 py-2.5 font-display font-bold text-sm uppercase tracking-widest rounded transition-all hover:bg-amber-400 hover:shadow-lg hover:shadow-amber-500/20 hover:-translate-y-0.5 active:translate-y-0"
               >
                 Get Free Quote
@@ -193,6 +195,7 @@ const Header: React.FC = () => {
                 {/* Mobile phone link */}
                 <a
                   href={`tel:${BUSINESS_INFO.phone}`}
+                  data-analytics-placement="header_mobile_menu_phone"
                   className="flex items-center gap-3 px-4 py-3 text-amber-400 font-display font-bold uppercase tracking-wider text-sm hover:bg-white/5 rounded transition-colors"
                 >
                   <PhoneIcon className="w-5 h-5" />
@@ -202,6 +205,7 @@ const Header: React.FC = () => {
                 {/* CTA */}
                 <Link
                   to="/contact"
+                  data-analytics-placement="header_mobile_menu_quote"
                   className="block mt-2 bg-amber-500 text-black px-4 py-3.5 font-display font-bold text-sm uppercase tracking-widest text-center rounded shadow-lg shadow-amber-500/20 active:scale-[0.98] transition-transform"
                 >
                   Get Free Quote
@@ -221,6 +225,7 @@ const Header: React.FC = () => {
           <div className="flex gap-3 max-w-lg mx-auto">
             <a
               href={`tel:${BUSINESS_INFO.phone}`}
+              data-analytics-placement="header_mobile_sticky_phone"
               className="flex-1 flex items-center justify-center gap-2 bg-white/10 text-white font-display font-bold text-xs uppercase tracking-widest py-3 rounded border border-white/20 active:scale-[0.98] transition-all"
             >
               <PhoneIcon className="w-4 h-4 text-amber-400" />
@@ -228,6 +233,7 @@ const Header: React.FC = () => {
             </a>
             <Link
               to="/contact"
+              data-analytics-placement="header_mobile_sticky_quote"
               className="flex-1 flex items-center justify-center gap-2 bg-amber-500 text-black font-display font-bold text-xs uppercase tracking-widest py-3 rounded active:scale-[0.98] transition-all"
             >
               Free Quote

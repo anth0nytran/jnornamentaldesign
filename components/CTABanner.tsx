@@ -46,6 +46,9 @@ const CTABanner: React.FC<CTABannerProps> = ({
                     <div className="flex-shrink-0">
                         <Link
                             to={link}
+                            data-analytics-placement="cta_banner"
+                            data-analytics-label={buttonText}
+                            data-analytics-target={title}
                             className={`
                                 inline-flex items-center gap-3 px-8 py-4 rounded-md font-display font-bold text-lg uppercase tracking-wider transition-all transform hover:scale-105 shadow-lg
                                 ${isPrimary

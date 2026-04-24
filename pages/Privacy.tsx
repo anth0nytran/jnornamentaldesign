@@ -57,7 +57,7 @@ const Privacy: React.FC = () => {
               <ul className="list-disc pl-6 mt-3 space-y-2">
                 <li>Respond to your inquiries and provide free estimates.</li>
                 <li>Communicate with you about our services, appointments, and project updates.</li>
-                <li>Send SMS notifications and marketing messages if you have opted in.</li>
+                <li>Send SMS notifications and service-related follow-ups if you have opted in.</li>
                 <li>Process job applications.</li>
                 <li>Improve our website and services.</li>
                 <li>Comply with legal obligations.</li>
@@ -68,14 +68,14 @@ const Privacy: React.FC = () => {
               <h2 className="text-2xl font-display font-bold text-iron-900 mb-4">4. SMS/Text Messaging</h2>
 
               <p className="mt-3">
-                <strong>Message Types:</strong> All SMS messages sent through our website are transactional and informational only. Messages include lead submission confirmations, missed call text-backs, appointment follow-ups, after-hours auto-replies, and one-time review requests after completed services.
+                <strong>Message Types:</strong> All SMS messages sent through our website are service-related, non-marketing messages only. Messages include lead submission confirmations, missed call text-backs, appointment follow-ups, after-hours auto-replies, and one-time review requests after completed services.
               </p>
 
               <p className="mt-3">
                 <strong>How You Opt In:</strong> Our website includes a contact/quote form with a phone number field and an unchecked SMS consent checkbox (not pre-checked). You must actively check the box to opt in. The checkbox reads:
               </p>
               <p className="mt-2 pl-4 border-l-4 border-amber-500 italic text-gray-500">
-                "I consent to receive SMS appointment reminders, quote follow-ups, project updates &amp; occasional marketing messages from {BUSINESS_INFO.name}. Message frequency may vary (approximately 2-6 messages per month). Message &amp; data rates may apply. Text HELP for assistance. You may reply STOP to unsubscribe at any time. Your information will not be shared with third parties. Privacy Policy &amp; Terms of Service."
+                "I consent to receive non-marketing text messages from {BUSINESS_INFO.name}. Message frequency may vary (approximately 2-6 messages per month) and may include quote follow-ups, appointment reminders, project updates, missed call text-backs, after-hours auto-replies, and one-time review requests. Message &amp; data rates may apply. Text HELP for assistance. You may reply STOP to unsubscribe at any time. Your information will not be shared with third parties. Privacy Policy &amp; Terms of Service."
               </p>
               <p className="mt-3">
                 Consent is voluntary and not required to submit the form or receive service. We capture and store proof of opt-in including timestamp, source page URL, phone number, and checkbox state.
@@ -98,7 +98,7 @@ const Privacy: React.FC = () => {
               </p>
 
               <p className="mt-3">
-                <strong>SMS Data and Privacy:</strong> We do not sell, rent, or share your mobile phone number or SMS consent data with any third parties for their marketing purposes. SMS consent and opt-in data is used solely for sending the transactional messages described in this section. Opt-in records (timestamp, source URL, phone number, consent state) are retained for compliance purposes.
+                <strong>SMS Data and Privacy:</strong> We do not sell, rent, or share your mobile phone number or SMS consent data with any third parties for their marketing purposes. SMS consent and opt-in data is used solely for sending the service-related messages described in this section. Opt-in records (timestamp, source URL, phone number, consent state) are retained for compliance purposes.
               </p>
 
               <p className="mt-3 font-semibold text-iron-900 bg-amber-50 border-l-4 border-amber-500 p-4">

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import SEOHead from '../components/SEOHead';
 import SchemaMarkup from '../components/SchemaMarkup';
 import { GALLERY_IMAGES } from '../galleryData';
+import { trackMarketingEvent } from '../utils/analytics';
 
 // ── Derive category filters from the data ────────────────────
 const CATEGORIES = ['All', ...Array.from(new Set(GALLERY_IMAGES.map(img => img.category)))];
@@ -17,7 +18,16 @@ const Gallery: React.FC = () => {
         ? GALLERY_IMAGES
         : GALLERY_IMAGES.filter(img => img.category === activeFilter);
 
-    const openLightbox = (idx: number) => setLightbox(idx);
+    const openLightbox = (idx: number) => {
+        const selected = filtered[idx];
+        if (selected) {
+            trackMarketingEvent('Gallery Lightbox Opened', {
+                label: selected.category,
+                target: selected.alt,
+            });
+        }
+        setLightbox(idx);
+    };
     const closeLightbox = () => setLightbox(null);
     const nextImage = () => setLightbox(prev => prev !== null ? (prev + 1) % filtered.length : null);
     const prevImage = () => setLightbox(prev => prev !== null ? (prev - 1 + filtered.length) % filtered.length : null);
@@ -67,7 +77,12 @@ const Gallery: React.FC = () => {
                         {CATEGORIES.map(cat => (
                             <button
                                 key={cat}
-                                onClick={() => setActiveFilter(cat)}
+                                onClick={() => {
+                                    setActiveFilter(cat);
+                                    trackMarketingEvent('Gallery Filter Selected', {
+                                        label: cat,
+                                    });
+                                }}
                                 className={`px-5 py-2 font-display font-bold text-sm uppercase tracking-widest whitespace-nowrap transition-all
                                     ${activeFilter === cat
                                         ? 'bg-iron-900 text-amber-500'
@@ -165,7 +180,11 @@ const Gallery: React.FC = () => {
                 <div className="container mx-auto px-6 max-w-4xl text-center">
                     <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4 uppercase">Ready to Start Your Project?</h2>
                     <p className="text-gray-400 mb-8 font-body normal-case text-lg">Get a free, no-obligation estimate. We'll bring every detail from concept to completion.</p>
-                    <Link to="/contact#quote" className="btn-primary inline-flex items-center gap-3 text-base">
+                    <Link
+                        to="/contact#quote"
+                        data-analytics-placement="gallery_bottom_cta"
+                        className="btn-primary inline-flex items-center gap-3 text-base"
+                    >
                         Request an Estimate
                     </Link>
                 </div>

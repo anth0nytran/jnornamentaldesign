@@ -83,6 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const smsConsent = body.smsConsent === true;
     const ageConsent = body.ageConsent === true;
     const smsConsentSource = normalizeText(body._smsConsentSource);
+    const analyticsAttribution = normalizeText(body._analyticsAttribution);
     const parsedFormLoadedAt = Number(body._formLoadedAt);
     const formLoadedAt = Number.isFinite(parsedFormLoadedAt) ? parsedFormLoadedAt : undefined;
 
@@ -137,8 +138,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       to: [quoteEmail],
       reply_to: email,
       subject: `New Quote Request | ${fullName} | ${service}`,
-      html: buildQuoteEmail({ name: fullName, phone, email, address, service, timeline, message, smsConsent, ageConsent }),
-      text: buildQuoteText({ name: fullName, phone, email, address, service, timeline, message, smsConsent, ageConsent }),
+      html: buildQuoteEmail({ name: fullName, phone, email, address, service, timeline, message, smsConsent, ageConsent, smsConsentSource, analyticsAttribution }),
+      text: buildQuoteText({ name: fullName, phone, email, address, service, timeline, message, smsConsent, ageConsent, smsConsentSource, analyticsAttribution }),
     };
 
     const resendResponse = await fetch('https://api.resend.com/emails', {
@@ -185,8 +186,10 @@ function buildQuoteText(data: {
   message?: string;
   smsConsent?: boolean;
   ageConsent?: boolean;
+  smsConsentSource?: string;
+  analyticsAttribution?: string;
 }) {
-  const { name, phone, email, address, service, timeline, message, smsConsent, ageConsent } = data;
+  const { name, phone, email, address, service, timeline, message, smsConsent, ageConsent, smsConsentSource, analyticsAttribution } = data;
 
   // Get Houston time for the timestamp
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -213,6 +216,8 @@ function buildQuoteText(data: {
     `Message: ${message || '(none)'}`,
     `SMS Consent: ${smsConsent ? 'Yes' : 'No'}`,
     `Age 18+ Confirmed: ${ageConsent ? 'Yes' : 'No'}`,
+    `Consent Source URL: ${smsConsentSource || '(not captured)'}`,
+    `Attribution: ${analyticsAttribution || '(direct / not captured)'}`,
     '',
     '--------------------------------------------------',
     'Powered by QuickLaunchWeb',
@@ -231,8 +236,10 @@ function buildQuoteEmail(data: {
   message?: string;
   smsConsent?: boolean;
   ageConsent?: boolean;
+  smsConsentSource?: string;
+  analyticsAttribution?: string;
 }) {
-  const { name, phone, email, address, service, timeline, message, smsConsent, ageConsent } = data;
+  const { name, phone, email, address, service, timeline, message, smsConsent, ageConsent, smsConsentSource, analyticsAttribution } = data;
 
   // Get Houston time for the timestamp
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -397,8 +404,14 @@ function buildQuoteEmail(data: {
                       <p style="margin:0 0 8px;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
                         <strong style="color:#ffffff;">SMS Consent:</strong> <span style="color:${smsConsent ? '#22c55e' : '#ef4444'};">${smsConsent ? 'Yes' : 'No'}</span>
                       </p>
-                      <p style="margin:0;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                      <p style="margin:0 0 8px;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
                         <strong style="color:#ffffff;">Age 18+ Confirmed:</strong> <span style="color:${ageConsent ? '#22c55e' : '#ef4444'};">${ageConsent ? 'Yes' : 'No'}</span>
+                      </p>
+                      <p style="margin:0;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                        <strong style="color:#ffffff;">Consent Source URL:</strong> ${smsConsentSource || '(not captured)'}
+                      </p>
+                      <p style="margin:8px 0 0;font-size:13px;color:#a1a1aa;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                        <strong style="color:#ffffff;">Attribution:</strong> ${analyticsAttribution || '(direct / not captured)'}
                       </p>
                    </td>
                 </tr>

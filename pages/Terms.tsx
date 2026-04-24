@@ -66,6 +66,10 @@ const Terms: React.FC = () => {
                 </ul>
 
                 <p>
+                  These are service-related, non-marketing text messages only.
+                </p>
+
+                <p>
                   You can cancel the SMS service at any time. Simply text <strong>"STOP"</strong> to the number you received messages from. Upon sending "STOP," we will confirm your unsubscribe status via SMS. Following this confirmation, you will no longer receive SMS messages from us. To rejoin, sign up as you did initially, and we will resume sending SMS messages to you.
                 </p>
 

@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BUSINESS_INFO, SERVICE_CATEGORIES } from '../constants';
 import { formatPhoneInput, isValidEmail, isValidName, isValidPhone, normalizeEmail, normalizeName } from '../utils/formValidation';
+import { buildLeadAttributionSummary, trackMarketingEvent } from '../utils/analytics';
 import { CheckCircleIcon, GoogleIcon, PhoneIcon, StarIcon } from './Icons';
 
 interface ContactFormProps {
@@ -80,6 +81,47 @@ const ContactForm: React.FC<ContactFormProps> = ({
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [errorMsg, setErrorMsg] = useState('');
     const formLoadedAt = useRef(Date.now());
+    const formContainerRef = useRef<HTMLDivElement | null>(null);
+    const hasTrackedView = useRef(false);
+    const hasTrackedStart = useRef(false);
+
+    useEffect(() => {
+        const node = formContainerRef.current;
+        if (!node || hasTrackedView.current || typeof window === 'undefined') {
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const [entry] = entries;
+                if (!entry?.isIntersecting || hasTrackedView.current) {
+                    return;
+                }
+
+                hasTrackedView.current = true;
+                trackMarketingEvent('Quote Form Viewed', {
+                    placement: variant,
+                });
+                observer.disconnect();
+            },
+            { threshold: 0.45 },
+        );
+
+        observer.observe(node);
+
+        return () => observer.disconnect();
+    }, [variant]);
+
+    const handleFormStart = () => {
+        if (hasTrackedStart.current) {
+            return;
+        }
+
+        hasTrackedStart.current = true;
+        trackMarketingEvent('Quote Form Started', {
+            placement: variant,
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -98,6 +140,12 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
         const validationError = validateContactData(normalizedData);
         if (validationError) {
+            trackMarketingEvent('Quote Form Error', {
+                placement: variant,
+                label: 'validation_error',
+                target: validationError,
+                service: normalizedData.service || 'not_selected',
+            });
             setSubmitStatus('error');
             setErrorMsg(validationError);
             setFormData((prev) => ({ ...prev, ...normalizedData }));
@@ -124,6 +172,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
                     ageConsent: normalizedData.ageConsent,
                     _formLoadedAt: formLoadedAt.current,
                     _smsConsentSource: window.location.href,
+                    _analyticsAttribution: buildLeadAttributionSummary(window.location.pathname),
                 }),
             });
 
@@ -132,8 +181,19 @@ const ContactForm: React.FC<ContactFormProps> = ({
                 throw new Error(body.error || 'Something went wrong. Please try again.');
             }
 
+            trackMarketingEvent('Quote Form Submitted', {
+                placement: variant,
+                service: normalizedData.service,
+                target: normalizedData.smsConsent ? 'sms_opt_in' : 'email_only',
+            });
             setSubmitStatus('success');
         } catch (err: any) {
+            trackMarketingEvent('Quote Form Error', {
+                placement: variant,
+                label: 'submit_error',
+                target: err.message || 'unknown_error',
+                service: normalizedData.service || 'not_selected',
+            });
             setErrorMsg(err.message || 'Something went wrong. Please try again.');
             setSubmitStatus('error');
         } finally {
@@ -165,7 +225,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
     if (submitStatus === 'success') {
         return (
-            <div className="text-center py-12">
+            <div ref={formContainerRef} className="text-center py-12">
                 <div className="w-16 h-16 bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
                     <CheckCircleIcon className="w-8 h-8 text-amber-500" />
                 </div>
@@ -177,6 +237,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
                 </p>
                 <a
                     href={`tel:${BUSINESS_INFO.phone}`}
+                    data-analytics-placement={`${variant}_quote_success`}
                     className="inline-flex items-center gap-2 text-iron-900 font-display font-bold hover:text-amber-500 transition-colors"
                 >
                     <PhoneIcon className="w-5 h-5" />
@@ -196,7 +257,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
     const requiredMark = <span className="text-amber-500">*</span>;
 
     return (
-        <div>
+        <div ref={formContainerRef}>
             {variant !== 'hero' && (
                 <div className="mb-8">
                     <h3 className="text-2xl font-display font-bold text-iron-900 mb-2">
@@ -206,7 +267,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className={isHero ? 'space-y-3' : 'space-y-4'} noValidate>
+            <form onSubmit={handleSubmit} onFocusCapture={handleFormStart} className={isHero ? 'space-y-3' : 'space-y-4'} noValidate>
                 <div>
                     <label htmlFor="fullName" className={labelClasses}>
                         Full Name {requiredMark}
@@ -363,14 +424,24 @@ const ContactForm: React.FC<ContactFormProps> = ({
                             id="smsConsent"
                             name="smsConsent"
                             checked={formData.smsConsent}
-                            onChange={(e) => setFormData((prev) => ({ ...prev, smsConsent: e.target.checked }))}
+                            onChange={(e) => {
+                                const checked = e.target.checked;
+                                if (checked) {
+                                    trackMarketingEvent('SMS Consent Checked', {
+                                        placement: variant,
+                                    });
+                                }
+                                setFormData((prev) => ({ ...prev, smsConsent: checked }));
+                            }}
                             className={`mt-0.5 accent-amber-500 cursor-pointer flex-shrink-0 ${isHero ? 'h-3.5 w-3.5' : 'h-4 w-4'}`}
                         />
                         <label htmlFor="smsConsent" className={`text-iron-900 font-body normal-case cursor-pointer ${isHero ? 'text-[11px] leading-snug' : 'text-xs leading-relaxed'}`}>
-                            I consent to receive SMS appointment reminders, quote follow-ups, project updates &amp; occasional marketing messages from{' '}
+                            I consent to receive non-marketing text messages from{' '}
                             <strong>{BUSINESS_INFO.name}</strong>. Message frequency may vary
-                            (approximately 2-6 messages per month). Message &amp; data rates may apply. Text HELP for assistance.
-                            You may reply STOP to unsubscribe at any time. Your information will not be shared with third parties.
+                            (approximately 2-6 messages per month) and may include quote follow-ups, appointment reminders, project updates,
+                            missed call text-backs, after-hours auto-replies, and one-time review requests. Message &amp; data rates may apply.
+                            Text HELP for assistance. You may reply STOP to unsubscribe at any time. Your information will not be shared with
+                            third parties.
                             See our{' '}
                             <Link to="/privacy" className="text-amber-600 underline hover:text-amber-500">Privacy Policy</Link> &amp;{' '}
                             <Link to="/terms" className="text-amber-600 underline hover:text-amber-500">Terms of Service</Link>.

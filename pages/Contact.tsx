@@ -75,7 +75,7 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div className="p-8 space-y-8">
-                  <a href={`tel:${BUSINESS_INFO.phone}`} className="flex items-start gap-5 group">
+                  <a href={`tel:${BUSINESS_INFO.phone}`} data-analytics-placement="contact_sidebar_phone" className="flex items-start gap-5 group">
                     <div className="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500 group-hover:text-black transition-all duration-300">
                       <PhoneIcon className="w-6 h-6" />
                     </div>
@@ -87,7 +87,7 @@ const Contact: React.FC = () => {
                     </div>
                   </a>
 
-                  <a href={`mailto:${BUSINESS_INFO.email}`} className="flex items-start gap-5 group">
+                  <a href={`mailto:${BUSINESS_INFO.email}`} data-analytics-placement="contact_sidebar_email" className="flex items-start gap-5 group">
                     <div className="w-12 h-12 bg-iron-900/10 text-iron-900 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-iron-900 group-hover:text-amber-500 transition-all duration-300">
                       <MailIcon className="w-6 h-6" />
                     </div>
@@ -229,6 +229,7 @@ const Contact: React.FC = () => {
                 href="https://share.google/WkPKxf6mf824qJ5bg"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics-placement="contact_google_profile"
                 className="btn-primary inline-flex items-center gap-3 text-base"
               >
                 View on Google

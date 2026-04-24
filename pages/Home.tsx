@@ -171,12 +171,14 @@ const Home: React.FC = () => {
                 <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-12 w-full">
                   <Link
                     to="/contact#quote"
+                    data-analytics-placement="home_hero_quote"
                     className="btn-primary inline-flex items-center gap-3 text-base"
                   >
                     Request an Estimate
                   </Link>
                   <Link
                     to="/gallery"
+                    data-analytics-placement="home_hero_portfolio"
                     className="btn-outline inline-flex items-center gap-3 text-base"
                   >
                     View Portfolio
@@ -277,7 +279,11 @@ const Home: React.FC = () => {
                 Every piece is hand-finished in our Houston workshop.
               </p>
             </div>
-            <Link to="/contact" className="hidden md:inline-flex items-center gap-3 text-iron-900 font-display font-bold hover:text-amber-500 transition-colors group text-lg uppercase tracking-wider">
+            <Link
+              to="/contact"
+              data-analytics-placement="home_services_overview"
+              className="hidden md:inline-flex items-center gap-3 text-iron-900 font-display font-bold hover:text-amber-500 transition-colors group text-lg uppercase tracking-wider"
+            >
               View All Services
               <div className="w-8 h-8 rounded-md border-2 border-current flex items-center justify-center group-hover:bg-amber-500 group-hover:border-amber-500 group-hover:text-black transition-all">
                 <ArrowRightIcon className="w-4 h-4" />
@@ -294,6 +300,8 @@ const Home: React.FC = () => {
                 <div key={category.slug}>
                   <Link
                     to={`/${category.slug}`}
+                    data-analytics-placement="home_service_cards"
+                    data-analytics-label={category.title}
                     className="group relative h-full flex flex-col bg-white border border-gray-200 overflow-hidden rounded-lg shadow-sm hover:shadow-xl hover:border-amber-500 transition-all duration-300"
                   >
                     <div className="h-64 overflow-hidden relative">
@@ -470,7 +478,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="text-center mt-16">
-            <Link to="/gallery" className="btn-primary inline-flex items-center gap-2">
+            <Link to="/gallery" data-analytics-placement="home_portfolio_section" className="btn-primary inline-flex items-center gap-2">
               View Full Portfolio <ArrowRightIcon className="w-4 h-4" />
             </Link>
           </div>
@@ -498,7 +506,7 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-6 max-w-7xl relative z-10 text-center">
           <h2 className="font-display text-4xl md:text-6xl font-bold text-white mb-6 uppercase">Get a Free Iron Fence Estimate Today</h2>
           <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-body normal-case">Get a free, detailed estimate for your custom fence, gate, or railing. No obligation.</p>
-          <Link to="/contact" className="btn-primary inline-flex items-center gap-3 text-lg px-10 py-4">
+          <Link to="/contact" data-analytics-placement="home_final_quote" className="btn-primary inline-flex items-center gap-3 text-lg px-10 py-4">
             Get a Free Quote <ArrowRightIcon className="w-5 h-5" />
           </Link>
         </div>
