@@ -34,6 +34,7 @@ We do not buy, sell, or share mobile opt-in data with third parties for marketin
 
 ```text
 Contacts opt in by submitting a contact or quote request form on https://www.jnornamentaldesign.com. The form includes a phone number field that is optional and an unchecked SMS consent checkbox that the user must actively check before submitting. Consent is voluntary and is not required to submit the form or receive service.
+
 ```
 
 ## Copy/Paste: Checkbox Language

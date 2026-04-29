@@ -142,6 +142,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       text: buildQuoteText({ name: fullName, phone, email, address, service, timeline, message, smsConsent, ageConsent, smsConsentSource, analyticsAttribution }),
     };
 
+    const submittedAtIso = new Date().toISOString();
+    const ghlPromise = sendToGhl({
+      firstName,
+      lastName,
+      fullName,
+      email,
+      phone,
+      address,
+      service,
+      timeline,
+      message,
+      smsConsent,
+      ageConsent,
+      smsConsentSource,
+      analyticsAttribution,
+      submittedAtIso,
+    });
+
     const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -150,6 +168,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
       body: JSON.stringify(resendPayload),
     });
+
+    await ghlPromise;
 
     if (!resendResponse.ok) {
       const resendErrorText = await resendResponse.text().catch(() => '');
@@ -442,4 +462,146 @@ function buildQuoteEmail(data: {
 </body>
 </html>
   `.trim();
+}
+
+const GHL_CUSTOM_FIELD_IDS = {
+  leadNotes: 'hNaYlhnAVKKdz1JxzbK8',
+  smsConsentSource: 'L4cQnwK0u7IbLcq4xSBN',
+  leadAttribution: 'Le9KO6qUgVArwVfeDGaC',
+  formSubmittedAt: 'nE2cTgu7KqcBSPq0HAj1',
+  formType: 'KJ5KpCrzN5o5BK7YNtIb',
+  smsConsent: 'MuA7pCBWAtpYLEWcBDrv',
+  ageConsent: 'PqHKOFWmhFZ3nvsPSEpN',
+} as const;
+
+function toE164(phone: string): string {
+  const digits = (phone || '').replace(/\D/g, '');
+  if (!digits) return '';
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`;
+  if (digits.startsWith('+')) return digits;
+  return `+${digits}`;
+}
+
+async function sendToGhl(data: {
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  address: string;
+  service: string;
+  timeline: string;
+  message: string;
+  smsConsent: boolean;
+  ageConsent: boolean;
+  smsConsentSource: string;
+  analyticsAttribution: string;
+  submittedAtIso: string;
+}): Promise<void> {
+  const apiKey = process.env.GHL_LOCATION_API_KEY;
+  const locationId = process.env.GHL_LOCATION_ID || '4jZDgqUkdVpJZ0HSGxhx';
+
+  // Fallback: if no API key configured, fire the legacy webhook so we don't drop leads.
+  if (!apiKey) {
+    const ghlWebhookUrl =
+      process.env.GHL_WEBHOOK_URL ||
+      'https://services.leadconnectorhq.com/hooks/4jZDgqUkdVpJZ0HSGxhx/webhook-trigger/fd3dd657-7c17-4a8e-a7f8-db6fad7a8b6d';
+    try {
+      const r = await fetch(ghlWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'jnornamentaldesign.com',
+          form: 'quote_request',
+          submitted_at: data.submittedAtIso,
+          full_name: data.fullName,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          service: data.service,
+          timeline: data.timeline,
+          message: data.message || '',
+          sms_consent: data.smsConsent,
+          age_consent: data.ageConsent,
+          sms_consent_source: data.smsConsentSource || '',
+          analytics_attribution: data.analyticsAttribution || '',
+          tags: ['new-lead', 'website-form', 'quote-request', data.service].filter(Boolean),
+        }),
+      });
+      if (!r.ok) {
+        const txt = await r.text().catch(() => '');
+        console.error('GHL webhook fallback error:', r.status, txt);
+      }
+    } catch (err) {
+      console.error('GHL webhook fallback fetch failed:', err);
+    }
+    return;
+  }
+
+  const phoneE164 = toE164(data.phone);
+  const isHotLead = /asap|immediate|urgent|now|this week/i.test(data.timeline);
+
+  const leadNotes = [
+    `Service: ${data.service}`,
+    `Timeline: ${data.timeline}`,
+    data.address ? `Address: ${data.address}` : null,
+    data.message ? `Message: ${data.message}` : null,
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  const tags = [
+    'new-lead',
+    'website-form',
+    'quote-request',
+    data.service ? `service-${data.service.toLowerCase().replace(/\s+/g, '-')}` : null,
+    isHotLead ? 'hot-lead' : null,
+  ].filter((t): t is string => Boolean(t));
+
+  const payload: Record<string, unknown> = {
+    locationId,
+    firstName: data.firstName || undefined,
+    lastName: data.lastName || undefined,
+    name: data.fullName || undefined,
+    email: data.email || undefined,
+    phone: phoneE164 || undefined,
+    address1: data.address || undefined,
+    source: 'Website - Quote Form',
+    tags,
+    customFields: [
+      { id: GHL_CUSTOM_FIELD_IDS.leadNotes, value: leadNotes },
+      { id: GHL_CUSTOM_FIELD_IDS.formType, value: 'quote_request' },
+      { id: GHL_CUSTOM_FIELD_IDS.formSubmittedAt, value: data.submittedAtIso },
+      { id: GHL_CUSTOM_FIELD_IDS.smsConsent, value: data.smsConsent ? 'Yes' : 'No' },
+      { id: GHL_CUSTOM_FIELD_IDS.ageConsent, value: data.ageConsent ? 'Yes' : 'No' },
+      data.smsConsentSource
+        ? { id: GHL_CUSTOM_FIELD_IDS.smsConsentSource, value: data.smsConsentSource }
+        : null,
+      data.analyticsAttribution
+        ? { id: GHL_CUSTOM_FIELD_IDS.leadAttribution, value: data.analyticsAttribution }
+        : null,
+    ].filter(Boolean),
+  };
+
+  try {
+    const r = await fetch('https://services.leadconnectorhq.com/contacts/upsert', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        Version: '2021-07-28',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!r.ok) {
+      const txt = await r.text().catch(() => '');
+      console.error('GHL upsert error:', r.status, txt);
+    }
+  } catch (err) {
+    console.error('GHL upsert fetch failed:', err);
+  }
 }
